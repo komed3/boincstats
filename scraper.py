@@ -3,8 +3,8 @@ import json
 import csv
 from bs4 import BeautifulSoup
 
-CFG = '../config.json'
-DBM = '../db'
+CFG = './config.json'
+DBM = './db'
 
 def load_config ( path ) :
     with open( path, 'r', encoding='utf-8' ) as f:
