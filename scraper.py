@@ -15,8 +15,8 @@ def ensure_db_folder ( path: str ) :
     os.makedirs( path, exist_ok=True )
 
 def get_url ( config, key: str ) :
-    if key in config.urls:
-        url = config.urls[ key ]
+    if key in config[ 'urls' ]:
+        url = config[ 'urls' ][ key ]
         for k in [ 'cpid', 'uid', 'username' ]:
             url.replace( '$' + k, config[ k ] )
         return url
