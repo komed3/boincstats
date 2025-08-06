@@ -28,8 +28,7 @@ def open_stream ( url: str ) -> ( str | None ) :
 # The main loop for scraping pages from config
 def scraping () -> None :
     pages: dict = CONFIG.get( 'pages', {} )
-    for page in pages:
-        opt: dict = pages.get( page, {} )
+    for page, opt in pages.items():
         if url := get_url( opt.get( 'url', '' ) ):
             if stream := open_stream( url ):
                 print( stream )
