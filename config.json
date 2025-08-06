@@ -2,7 +2,10 @@
   "cpid": "28861c85945df23be9eaf60026019071",
   "uid": "227137778700",
   "username": "komed3",
-  "urls": {
-    "lastDays": "https://boincstats.com/stats/-1/user/detail/$uid/lastDays"
+  "pages": {
+    "lastDays": {
+      "url": "https://boincstats.com/stats/-1/user/detail/$uid/lastDays",
+      "id": "tblStats"
+    }
   }
 }
