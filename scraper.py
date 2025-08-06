@@ -1,8 +1,9 @@
 # Load requirements
 import json
+import requests
 
 # Global vars
-CONFIG = {}
+CONFIG: dict = {}
 
 # Load config file with user info and URLs
 def load_config () -> bool :
@@ -12,9 +13,31 @@ def load_config () -> bool :
         return True
     return False
 
-# The main program, does the scraping
+# Resolves an URL and replace dynamic vars, like UID or username
+def get_url ( url: str ) -> str :
+    for k in [ 'cpid', 'uid', 'username' ]:
+        url.replace( '$' + k, CONFIG.get( k, '' ) )
+    return url
+
+# Opens a stream from a URL and returns the content
+def open_stream ( url: str ) -> ( str | None ) :
+    with requests.get( url ) as response:
+        return response.text
+    return None
+
+# The main loop for scraping pages from config
+def scraping () -> None :
+    pages: dict = CONFIG.get( 'pages', {} )
+    for page in pages:
+        opt: dict = pages.get( page, {} )
+        if url := get_url( opt.get( 'url', '' ) ):
+            if stream := open_stream( url ):
+                print( stream )
+
+# The main program loop
 def main () -> None :
-    load_config()
+    if load_config():
+        scraping()
 
 # Run the program
 # Safely execute the main function
