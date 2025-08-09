@@ -1,23 +1,32 @@
 # Load requirements
 from bs4 import BeautifulSoup, Tag
+import chromedriver_autoinstaller
 import json
 import os
+from pyvirtualdisplay.display import Display
 import random
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
 import time
 
 # Global vars
 CONFIG: dict = {}
+DISPLAY = None
 DRIVER = None
 
 # Instantiate Chrome WebDriver with options
 def init_driver () -> None :
-    global DRIVER
-    service = ChromeService( executable_path = '/snap/bin/chromium.chromedriver' )
+    global DISPLAY, DRIVER
+    DISPLAY = Display( visible = False, size = ( 800, 800 ) )
+    DISPLAY.start()
+    chromedriver_autoinstaller.install()
     options = webdriver.ChromeOptions()
-    options.add_argument( '--headless=new' )
-    DRIVER = webdriver.Chrome( service = service, options = options )
+    options.add_argument( '--window-size=1200,1200' )
+    options.add_argument( '--ignore-certificate-errors' )
+    options.add_argument( '--disable-gpu' )
+    options.add_argument( '--no-sandbox' )
+    options.add_argument( '--disable-dev-shm-usage' )
+    options.add_argument( '--remote-debugging-port=9222' )
+    DRIVER = webdriver.Chrome( options = options )
 
 # Close the WebDriver
 def close_driver () -> None :
