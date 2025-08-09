@@ -5,7 +5,18 @@
   "pages": {
     "lastDays": {
       "url": "https://boincstats.com/stats/-1/user/detail/$uid/lastDays",
-      "id": "tblStats"
+      "id": "tblStats",
+      "cols": {
+        "date": "date",
+        "total": "number",
+        "daily": "number",
+        "rank": "number",
+        "rank_cng": "number",
+        "team_rank": "number",
+        "team_cng": "number",
+        "country_rank": "number",
+        "country_cng": "number"
+      }
     }
   }
 }
