@@ -25,13 +25,35 @@ jobs:
         with:
           python-version: '3.x'
 
-      # Installing packages
-      - name: Installing package list
-        run: apt list --installed
-      - name: Removing previous chrome instances on runner
-        run: sudo apt purge google-chrome-stable
+      # Install Google Chrome
+      - name: Install Google Chrome
+        run: |
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      # Install Chromedriver
+      - name: Install Chromedriver
+        run: |
+          sudo apt-get install -yqq unzip
+          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+' | head -1)
+          CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+          wget -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
+          unzip /tmp/chromedriver.zip -d /tmp
+          sudo mv /tmp/chromedriver /usr/local/bin/chromedriver
+          sudo chmod +x /usr/local/bin/chromedriver
+
+      # Install Xvfb
       - name: Install xvfb
         run: sudo apt-get install xvfb
+
+      # Start Xvfb server
+      - name: Start Xvfb
+        run: |
+          Xvfb :99 -screen 0 1920x1080x24 &
+        env:
+          DISPLAY: :99
 
       # Install dependencies
       - name: Install dependencies
@@ -41,18 +63,16 @@ jobs:
 
       # Run scraper.py script
       - name: Run scraper
+        env:
+          DISPLAY: :99
         run: |
-          mkdir db
           python scraper.py
 
-      # Upload database as Artifact
-      - name: Upload DB as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: db
-          path: db/
-          if-no-files-found: error
-          compression-level: 9
+      # Check for DB files
+      - name: Check DB files
+        run: |
+          ls -l
+          cat db/* || echo "No DB files"
 
       # Configure Git for commit
       - name: Configure Git user
