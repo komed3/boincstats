@@ -97,8 +97,8 @@ def load_from_db ( name: str ) -> dict :
     return data
 
 # Save data to the database
-def save_to_db ( name: str, opt: dict, data: list ) -> bool :
-    if not data: return False
+def save_to_db ( name: str, opt: dict, data: list ) -> int :
+    if not data: return 0
     os.makedirs( 'db', exist_ok = True )
     cols: dict = opt.get( 'cols', {} )
     path: str = get_db_path( name )
@@ -119,19 +119,20 @@ def save_to_db ( name: str, opt: dict, data: list ) -> bool :
     with open( path, 'w', encoding = 'utf-8' ) as f:
         for line in sort:
             f.write( line + '\n' )
-    return True
+    return len( sort )
 
 # The main loop for scraping pages defined in config
 def scraping () -> None :
     pages: dict = CONFIG.get( 'pages', {} )
     for page, opt in pages.items():
         print( f'>> Scraping for "{page}" ...' )
+        rows: int = 0
         if url := resolve_url( opt.get( 'url', '' ) ):
             if stream := get_stream( url ):
                 if data := parse_table( stream, opt ):
-                    save_to_db( page, opt, data )
-            time.sleep( random.randint( 5, 15 ) )
-        print( '   ... done' )
+                    rows = save_to_db( page, opt, data )
+        print( f'   ... done [{rows} entries]' )
+        time.sleep( random.randint( 5, 15 ) )
 
 # The main program loop
 def main () -> None :
