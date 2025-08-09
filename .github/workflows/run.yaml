@@ -5,8 +5,8 @@ name: BOINCStats Scraper
 
 on:
   # Daily at 02:00 UTC
-  schedule:
-    - cron: '0 2 * * *'
+  #schedule:
+  #  - cron: '0 2 * * *'
   workflow_dispatch:
 
 jobs:
