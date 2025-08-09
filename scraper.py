@@ -96,12 +96,14 @@ def load_from_db ( name: str ) -> dict :
 
 # Save data to the database
 def save_to_db ( name: str, opt: dict, data: list ) -> bool :
-    if not data:
-        return False
+    if not data: return False
     os.makedirs( 'db', exist_ok = True )
     cols: dict = opt.get( 'cols', {} )
     path: str = get_db_path( name )
-    prev: dict = load_from_db( name )
+    if opt.get( 'incremental', True ) == True:
+        prev: dict = load_from_db( name )
+    else:
+        prev: dict = {}
     for row in data:
         if len( row ) < len( cols ):
             continue # Invalid row
@@ -109,7 +111,7 @@ def save_to_db ( name: str, opt: dict, data: list ) -> bool :
         if not frow:
             continue # Invalid format
         prop = frow[ 0 ]
-        if prop not in prev or opt.get( 'incremental', True ) == False:
+        if prop not in prev:
             prev[ prop ] = ' '.join( frow[ :len( cols ) ] )
     sort = [ prev[ k ] for k in sorted( prev.keys() ) ]
     with open( path, 'w', encoding = 'utf-8' ) as f:
