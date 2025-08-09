@@ -33,7 +33,7 @@ def load_config () -> bool :
 
 # Get the path to the database file
 def get_db_path ( name: str ) -> str :
-    return os.path.join( 'db', f'{name}.txt' )
+    return os.path.join( 'db', name )
 
 # Resolves an URL and replace dynamic vars, like UID or username
 def resolve_url ( url: str ) -> str :

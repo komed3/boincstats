@@ -30,7 +30,9 @@ jobs:
 
       # Run scraper.py script
       - name: Run scraper
-        run: python scraper.py
+        run: |
+          mkdir db
+          python scraper.py
 
       # Configure Git for commit
       - name: Configure Git user
@@ -41,9 +43,13 @@ jobs:
       # Commit updated BOINCStats data (only if there are changes)
       - name: Commit BOINCStats data
         run: |
-          git add db/*.txt
-          git commit -m "Automatic update of BOINCStats data [GitHub Actions]" || echo "No changes to commit"
-          git push
+          if [ -d db ] && [ "$(ls -A db)" ]; then
+            git add db
+            git commit -m "Automatic update of BOINCStats data [GitHub Actions]" || echo "No changes to commit"
+            git push
+          else
+            echo "No db files to commit."
+          fi
 
       # Push changes to the repo's master branch
       - name: Push changes
