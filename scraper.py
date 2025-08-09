@@ -1,7 +1,10 @@
 # Load requirements
 from bs4 import BeautifulSoup, Tag
 import json
+import os
+import random
 from selenium import webdriver
+import time
 
 # Global vars
 CONFIG: dict = {}
@@ -27,6 +30,10 @@ def load_config () -> bool :
         CONFIG = json.load( cfg )
         return True
     return False
+
+# Get the path to the database file
+def get_db_path ( name: str ) -> str :
+    return os.path.join( 'db', f'{name}.txt' )
 
 # Resolves an URL and replace dynamic vars, like UID or username
 def resolve_url ( url: str ) -> str :
@@ -57,6 +64,38 @@ def parse_table ( stream: str, opt: dict ) -> list :
                     data.append( cols )
     return data
 
+# Load data from the database
+def load_from_db ( name: str ) -> dict :
+    path: str = get_db_path( name )
+    data: dict = {}
+    if os.path.exists( path ):
+        with open( path, 'r', encoding = 'utf-8' ) as f:
+            for line in f:
+                parts: list = line.strip().split()
+                if parts:
+                    data[ parts[ 0 ] ] = line.strip()
+    return data
+
+# Save data to the database
+def save_to_db ( name: str, opt: dict, data: list ) -> bool :
+    if not data:
+        return False
+    os.makedirs( 'db', exist_ok = True )
+    cols: dict = opt.get( 'cols', {} )
+    path: str = get_db_path( name )
+    prev: dict = load_from_db( name )
+    for row in data:
+        if len( row ) < len( cols ):
+            continue  # Invalid row
+        prop = row[ 0 ]
+        if prop not in prev:
+            prev[ prop ] = " ".join( row[:len( cols ) ] )
+    sort = [ prev[ k ] for k in sorted( prev.keys() ) ]
+    with open( path, 'w', encoding = 'utf-8' ) as f:
+        for line in sort:
+            f.write( line + '\n' )
+    return True
+
 # The main loop for scraping pages defined in config
 def scraping () -> None :
     pages: dict = CONFIG.get( 'pages', {} )
@@ -64,7 +103,8 @@ def scraping () -> None :
         if url := resolve_url( opt.get( 'url', '' ) ):
             if stream := get_stream( url ):
                 if data := parse_table( stream, opt ):
-                    print( data )
+                    save_to_db( page, opt, data )
+            time.sleep( random.randint( 5, 15 ) )
 
 # The main program loop
 def main () -> None :
@@ -75,5 +115,4 @@ def main () -> None :
 
 # Run the program
 # Safely execute the main function
-if __name__ == '__main__':
-    main()
+if __name__ == '__main__': main()
