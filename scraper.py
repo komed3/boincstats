@@ -1,10 +1,24 @@
 # Load requirements
 from bs4 import BeautifulSoup, Tag
 import json
-import requests
+from selenium import webdriver
 
 # Global vars
 CONFIG: dict = {}
+DRIVER = None
+
+# Instantiate Chrome WebDriver with options
+def init_driver () -> None :
+    global DRIVER
+    opt = webdriver.ChromeOptions()
+    opt.add_argument( '--headless=new' )
+    DRIVER = webdriver.Chrome( options = opt )
+
+# Close the WebDriver
+def close_driver () -> None :
+    global DRIVER
+    if DRIVER:
+        DRIVER.quit()
 
 # Load config file with user info and URLs
 def load_config () -> bool :
@@ -15,45 +29,25 @@ def load_config () -> bool :
     return False
 
 # Resolves an URL and replace dynamic vars, like UID or username
-def get_url ( url: str ) -> str :
+def resolve_url ( url: str ) -> str :
+    global CONFIG
     for k in [ 'cpid', 'uid', 'username' ]:
         url = url.replace( '$' + k, CONFIG.get( k, '' ) )
     return url
 
-# Opens a stream from a URL and returns the content
-def open_stream ( url: str ) -> ( str | None ) :
-    with requests.get( url ) as response:
-        return response.text
-    return None
-
-def parse_table ( stream: str, opt: dict ) -> ( dict | None ) :
-    soup = BeautifulSoup( stream, 'html.parser' )
-    table = soup.find( id = opt.get( 'id', '' ) )
-    print( soup )
-    data: dict = {}
-    if table and isinstance( table, Tag ):
-        tbody = table.find( 'tbody' )
-        if tbody and isinstance( tbody, Tag ):
-            for row in tbody.find_all( 'tr' ):
-                if not isinstance( row, Tag ):
-                    continue
-                if cols := [ td.get_text( strip=True ) for td in row.find_all( 'td' ) ]:
-                    print( cols )
-    return None
-
-# The main loop for scraping pages from config
-def scraping () -> None :
-    pages: dict = CONFIG.get( 'pages', {} )
-    for page, opt in pages.items():
-        if url := get_url( opt.get( 'url', '' ) ):
-            if stream := open_stream( url ):
-                if data := parse_table( stream, opt ):
-                    print( data )
+# Gets the stream from a URL and returns the content
+def get_stream ( url: str ) -> ( str | None ) :
+    global DRIVER
+    if DRIVER:
+        DRIVER.get( url )
+        return DRIVER.page_source
 
 # The main program loop
 def main () -> None :
     if load_config():
-        scraping()
+        init_driver()
+        #scraping()
+        close_driver()
 
 # Run the program
 # Safely execute the main function
