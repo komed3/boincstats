@@ -125,11 +125,13 @@ def save_to_db ( name: str, opt: dict, data: list ) -> bool :
 def scraping () -> None :
     pages: dict = CONFIG.get( 'pages', {} )
     for page, opt in pages.items():
+        print( f'>> Scraping for "{page}" ...' )
         if url := resolve_url( opt.get( 'url', '' ) ):
             if stream := get_stream( url ):
                 if data := parse_table( stream, opt ):
                     save_to_db( page, opt, data )
             time.sleep( random.randint( 5, 15 ) )
+        print( '   ... done' )
 
 # The main program loop
 def main () -> None :

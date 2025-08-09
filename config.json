@@ -24,7 +24,7 @@
       "id": "tblStats",
       "incremental": false,
       "cols": {
-        "name": "string",
+        "project": "string",
         "total": "number",
         "share": "number",
         "today": "number",
