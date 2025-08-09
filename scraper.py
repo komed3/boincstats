@@ -42,11 +42,35 @@ def get_stream ( url: str ) -> ( str | None ) :
         DRIVER.get( url )
         return DRIVER.page_source
 
+# Parse the HTML stream and extract table data
+def parse_table ( stream: str, opt: dict ) -> list :
+    soup = BeautifulSoup( stream, 'html.parser' )
+    table = soup.find( id = opt.get( 'id', '' ) )
+    data: list = []
+    if table and isinstance( table, Tag ):
+        tbody = table.find( 'tbody' )
+        if tbody and isinstance( tbody, Tag ):
+            for row in tbody.find_all( 'tr' ):
+                if not isinstance( row, Tag ):
+                    continue
+                if cols := [ td.get_text( strip = True ) for td in row.find_all( 'td' ) ]:
+                    data.append( cols )
+    return data
+
+# The main loop for scraping pages defined in config
+def scraping () -> None :
+    pages: dict = CONFIG.get( 'pages', {} )
+    for page, opt in pages.items():
+        if url := resolve_url( opt.get( 'url', '' ) ):
+            if stream := get_stream( url ):
+                if data := parse_table( stream, opt ):
+                    print( data )
+
 # The main program loop
 def main () -> None :
     if load_config():
         init_driver()
-        #scraping()
+        scraping()
         close_driver()
 
 # Run the program
