@@ -25,6 +25,14 @@ jobs:
         with:
           python-version: '3.x'
 
+      # Installing packages
+      - name: Installing package list
+        run: apt list --installed
+      - name: Removing previous chrome instances on runner
+        run: sudo apt purge google-chrome-stable
+      - name: Install xvfb
+        run: sudo apt-get install xvfb
+
       # Install dependencies
       - name: Install dependencies
         run: |
