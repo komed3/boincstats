@@ -64,6 +64,24 @@ def parse_table ( stream: str, opt: dict ) -> list :
                     data.append( cols )
     return data
 
+# Validate and format data by given column types
+def validate_row ( row: list, cols: dict ) -> ( list | None ):
+    formatted: list = []
+    for value, ( _, typ ) in zip( row, cols.items() ):
+        if typ == 'date':
+            if not value or len( value ) != 10 or value[ 4 ] != '-' or value[ 7 ] != '-':
+                return None
+            formatted.append( value )
+        elif typ == 'number':
+            try:
+                num = int( value.replace( ',', '' ) )
+                formatted.append( str( num ) )
+            except ValueError:
+                return None
+        else:
+            formatted.append( value )
+    return formatted
+
 # Load data from the database
 def load_from_db ( name: str ) -> dict :
     path: str = get_db_path( name )
@@ -87,9 +105,12 @@ def save_to_db ( name: str, opt: dict, data: list ) -> bool :
     for row in data:
         if len( row ) < len( cols ):
             continue  # Invalid row
-        prop = row[ 0 ]
+        frow = validate_row( row, cols )
+        if not frow:
+            continue # Invalid format
+        prop = frow[ 0 ]
         if prop not in prev:
-            prev[ prop ] = " ".join( row[:len( cols ) ] )
+            prev[ prop ] = ' '.join( frow[:len( cols ) ] )
     sort = [ prev[ k ] for k in sorted( prev.keys() ) ]
     with open( path, 'w', encoding = 'utf-8' ) as f:
         for line in sort:
