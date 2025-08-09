@@ -1,3 +1,6 @@
+# GitHub Actions Workflow for BOINCStats Scraper
+# This workflow scrapes BOINCStats data daily and commits the results to the repository.
+
 name: BOINCStats Scraper
 
 on:
@@ -20,7 +23,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.x'
 
       # Install dependencies
       - name: Install dependencies
@@ -33,6 +36,15 @@ jobs:
         run: |
           mkdir db
           python scraper.py
+
+      # Upload db as Artifact
+      - name: Upload db as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: db
+          path: db/
+          if-no-files-found: error
+          compression-level: 9
 
       # Configure Git for commit
       - name: Configure Git user
