@@ -1,9 +1,9 @@
 name: BOINCStats Scraper
 
 on:
-  # Daily at 05:00 UTC (e.g. 07:00 CET/CEST)
+  # Daily at 02:00 UTC
   schedule:
-    - cron: '0 5 * * *'
+    - cron: '0 2 * * *'
   workflow_dispatch:
 
 jobs:
