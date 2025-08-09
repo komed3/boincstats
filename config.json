@@ -3,9 +3,10 @@
   "uid": "227137778700",
   "username": "komed3",
   "pages": {
-    "lastDays": {
+    "daily": {
       "url": "https://boincstats.com/stats/-1/user/detail/$uid/lastDays",
       "id": "tblStats",
+      "incremental": true,
       "cols": {
         "date": "date",
         "total": "number",
@@ -16,6 +17,42 @@
         "team_cng": "number",
         "country_rank": "number",
         "country_cng": "number"
+      }
+    },
+    "projects": {
+      "url": "https://boincstats.com/stats/-1/user/detail/$uid/projectList",
+      "id": "tblStats",
+      "incremental": false,
+      "cols": {
+        "name": "string",
+        "total": "number",
+        "share": "number",
+        "today": "number",
+        "daily": "number",
+        "weekly": "number",
+        "monthly": "number",
+        "rank": "number",
+        "rank_cng_day": "number",
+        "rank_cng_week": "number",
+        "rank_cng_month": "number",
+        "team_rank": "number",
+        "country_rank": "number"
+      }
+    },
+    "hosts": {
+      "url": "https://boincstats.com/stats/-1/host/list/0/0/$cpid",
+      "id": "tblStats",
+      "incremental": false,
+      "cols": {
+        "rank": "number",
+        "cpu": "string",
+        "cores": "number",
+        "os": "string",
+        "total": "number",
+        "daily": "number",
+        "weekly": "number",
+        "monthly": "number",
+        "avg": "number"
       }
     }
   }
