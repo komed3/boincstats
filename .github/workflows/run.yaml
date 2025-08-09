@@ -37,8 +37,8 @@ jobs:
           mkdir db
           python scraper.py
 
-      # Upload db as Artifact
-      - name: Upload db as Artifact
+      # Upload database as Artifact
+      - name: Upload DB as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: db

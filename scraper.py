@@ -4,6 +4,7 @@ import json
 import os
 import random
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
 import time
 
 # Global vars
@@ -13,9 +14,10 @@ DRIVER = None
 # Instantiate Chrome WebDriver with options
 def init_driver () -> None :
     global DRIVER
-    opt = webdriver.ChromeOptions()
-    opt.add_argument( '--headless=new' )
-    DRIVER = webdriver.Chrome( options = opt )
+    service = ChromeService( executable_path = '/snap/bin/chromium.chromedriver' )
+    options = webdriver.ChromeOptions()
+    options.add_argument( '--headless=new' )
+    DRIVER = webdriver.Chrome( service = service, options = options )
 
 # Close the WebDriver
 def close_driver () -> None :
