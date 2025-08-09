@@ -104,13 +104,13 @@ def save_to_db ( name: str, opt: dict, data: list ) -> bool :
     prev: dict = load_from_db( name )
     for row in data:
         if len( row ) < len( cols ):
-            continue  # Invalid row
+            continue # Invalid row
         frow = validate_row( row, cols )
         if not frow:
             continue # Invalid format
         prop = frow[ 0 ]
-        if prop not in prev:
-            prev[ prop ] = ' '.join( frow[:len( cols ) ] )
+        if prop not in prev or opt.get( 'incremental', True ) == False:
+            prev[ prop ] = ' '.join( frow[ :len( cols ) ] )
     sort = [ prev[ k ] for k in sorted( prev.keys() ) ]
     with open( path, 'w', encoding = 'utf-8' ) as f:
         for line in sort:
