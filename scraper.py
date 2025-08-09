@@ -74,10 +74,12 @@ def validate_row ( row: list, cols: dict ) -> ( list | None ):
             formatted.append( value )
         elif typ == 'number':
             try:
-                num = int( value.replace( ',', '' ) )
+                num = int( '0' + value.replace( ',', '' ) )
                 formatted.append( str( num ) )
             except ValueError:
                 return None
+        elif typ == 'string':
+            formatted.append( f'"{value}"' )
         else:
             formatted.append( value )
     return formatted
