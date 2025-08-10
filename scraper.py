@@ -4,7 +4,12 @@ import json
 import os
 import random
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 import time
+from webdriver_manager.chrome import ChromeDriverManager
 
 # Global vars
 CONFIG: dict = {}
@@ -14,11 +19,14 @@ DRIVER = None
 def init_driver () -> None :
     global DRIVER
     options = webdriver.ChromeOptions()
-    options.add_argument( '--headless' )
+    options.add_argument( '--headless=new' )
     options.add_argument( '--disable-gpu' )
     options.add_argument( '--no-sandbox' )
     options.add_argument( '--disable-dev-shm-usage' )
-    DRIVER = webdriver.Chrome( options = options )
+    DRIVER = webdriver.Chrome(
+      service = Service( ChromeDriverManager().install() ),
+      options = options
+    )
 
 # Close the WebDriver
 def close_driver () -> None :
@@ -49,7 +57,13 @@ def resolve_url ( url: str ) -> str :
 def get_stream ( url: str ) -> ( str | None ) :
     global DRIVER
     if DRIVER:
-        DRIVER.get( url )
+        try:
+            WebDriverWait( DRIVER, 10 ).until(
+                EC.presence_of_element_located( ( By.ID, 'tblStats' ) )
+            )
+            time.sleep( 1 )
+        except:
+            print( f'Timeout loading {url}' )
         return DRIVER.page_source
 
 # Parse the HTML stream and extract table data
