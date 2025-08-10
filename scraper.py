@@ -83,9 +83,15 @@ def validate_row ( row: list, cols: dict ) -> ( list | None ):
             if not value or len( value ) != 10 or value[ 4 ] != '-' or value[ 7 ] != '-':
                 return None
             formatted.append( value )
-        elif typ == 'number':
+        elif typ == 'int':
             try:
                 num = int( '0' + value.replace( ',', '' ) )
+                formatted.append( str( num ) )
+            except ValueError:
+                return None
+        elif typ == 'float':
+            try:
+                num = float( '0' + value.replace( ',', '' ) )
                 formatted.append( str( num ) )
             except ValueError:
                 return None

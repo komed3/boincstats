@@ -9,14 +9,14 @@
       "incremental": true,
       "cols": {
         "date": "date",
-        "total": "number",
-        "daily": "number",
-        "rank": "number",
-        "rank_cng": "number",
-        "team_rank": "number",
-        "team_cng": "number",
-        "country_rank": "number",
-        "country_cng": "number"
+        "total": "int",
+        "daily": "int",
+        "rank": "int",
+        "rank_cng": "int",
+        "team_rank": "int",
+        "team_cng": "int",
+        "country_rank": "int",
+        "country_cng": "int"
       }
     },
     "projects": {
@@ -25,18 +25,18 @@
       "incremental": false,
       "cols": {
         "project": "string",
-        "total": "number",
-        "share": "number",
-        "today": "number",
-        "daily": "number",
-        "weekly": "number",
-        "monthly": "number",
-        "rank": "number",
-        "rank_cng_day": "number",
-        "rank_cng_week": "number",
-        "rank_cng_month": "number",
-        "team_rank": "number",
-        "country_rank": "number"
+        "total": "float",
+        "share": "float",
+        "today": "int",
+        "daily": "int",
+        "weekly": "int",
+        "monthly": "int",
+        "rank": "int",
+        "rank_cng_day": "int",
+        "rank_cng_week": "int",
+        "rank_cng_month": "int",
+        "team_rank": "int",
+        "country_rank": "int"
       }
     },
     "hosts": {
@@ -44,15 +44,15 @@
       "id": "tblStats",
       "incremental": false,
       "cols": {
-        "rank": "number",
+        "rank": "int",
         "cpu": "string",
-        "cores": "number",
+        "cores": "int",
         "os": "string",
-        "total": "number",
-        "daily": "number",
-        "weekly": "number",
-        "monthly": "number",
-        "avg": "number"
+        "total": "int",
+        "daily": "int",
+        "weekly": "int",
+        "monthly": "int",
+        "avg": "int"
       }
     }
   }
