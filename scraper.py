@@ -61,8 +61,11 @@ def get_stream ( url: str ) -> ( str | None ) :
     global DRIVER
     if DRIVER:
         try:
-            WebDriverWait( DRIVER, 10 ).until(
-                EC.presence_of_element_located( ( By.ID, 'tblStats' ) )
+            WebDriverWait( DRIVER, 60 ).until(
+                EC.presence_of_element_located( (
+                    By.CSS_SELECTOR,
+                    '#tblProjects tbody tr'
+                ) )
             )
             time.sleep( 1 )
         except:
