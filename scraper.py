@@ -5,9 +5,6 @@ import os
 import random
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 import time
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -60,16 +57,7 @@ def resolve_url ( url: str ) -> str :
 def get_stream ( url: str ) -> ( str | None ) :
     global DRIVER
     if DRIVER:
-        try:
-            WebDriverWait( DRIVER, 10 ).until(
-                EC.presence_of_element_located(
-                    ( By.CSS_SELECTOR, '#tblProjects tbody tr' )
-                )
-            )
-            time.sleep( 1 )
-        except:
-            DRIVER.save_screenshot( f'./db/{url}.png' )
-            print( f'Timeout loading {url}' )
+        DRIVER.get( url )
         return DRIVER.page_source
 
 # Parse the HTML stream and extract table data
