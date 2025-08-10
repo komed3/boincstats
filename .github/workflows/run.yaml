@@ -35,7 +35,7 @@ jobs:
             libgbm-dev \
             libnss3 \
             fonts-liberation \
-            libasound2
+            libasound2t64
 
       # Install Python dependencies
       - name: Install dependencies
