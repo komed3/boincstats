@@ -61,7 +61,7 @@ def get_stream ( url: str ) -> ( str | None ) :
     global DRIVER
     if DRIVER:
         try:
-            WebDriverWait( DRIVER, 60 ).until(
+            WebDriverWait( DRIVER, 10 ).until(
                 EC.presence_of_element_located( (
                     By.CSS_SELECTOR,
                     '#tblProjects tbody tr'
@@ -69,6 +69,9 @@ def get_stream ( url: str ) -> ( str | None ) :
             )
             time.sleep( 1 )
         except:
+            DRIVER.save_screenshot( f'./db/{url}.png' )
+            with open( f'./db/{url}.png', 'w', encoding = 'utf-8' ) as f:
+                f.write( DRIVER.page_source )
             print( f'Timeout loading {url}' )
         return DRIVER.page_source
 
