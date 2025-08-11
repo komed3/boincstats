@@ -33,7 +33,7 @@ async function fetchTable(path, colNames, filterZeroCol) {
 
 // Formatierung
 function formatNumber(n) {
-    return n && !isNaN(n) ? Number(n).toLocaleString('de-DE') : '-';
+    return n && !isNaN(n) ? Number(n).toLocaleString('en-US') : '-';
 }
 function formatDate(d) {
     if (!d) return '-';
@@ -46,11 +46,11 @@ function renderHighlights(dailyData) {
     if (!dailyData.length) return;
     const latest = dailyData[dailyData.length - 1];
     const tiles = [
-        { label: "Gesamtpunkte", value: formatNumber(latest.total) },
-        { label: "Tagespunkte", value: formatNumber(latest.daily) },
-        { label: "Gesamtrang", value: formatNumber(latest.rank) },
-        { label: "Länderrang", value: formatNumber(latest.country_rank) },
-        { label: "Veränderung (Tag)", value: formatNumber(latest.rank_cng) },
+        { label: "Total Points", value: formatNumber(latest.total) },
+        { label: "Daily Points", value: formatNumber(latest.daily) },
+        { label: "World Rank", value: formatNumber(latest.rank) },
+        { label: "Country Rank", value: formatNumber(latest.country_rank) },
+        { label: "1D Change", value: formatNumber(latest.rank_cng) },
     ];
     document.getElementById('highlights').innerHTML = tiles.map(tile =>
         `<div class="highlight-tile">
@@ -63,10 +63,10 @@ function renderHighlights(dailyData) {
 // Chart-Kacheln mit Titel
 function renderChartTiles() {
     const chartInfo = [
-        { id: "totalPointsChart", title: "Gesamtpunkte" },
-        { id: "rankChart", title: "Gesamtrang" },
-        { id: "dailyPointsChart", title: "Tagespunkte" },
-        { id: "countryRankChart", title: "Länderrang" }
+        { id: "totalPointsChart", title: "Total Points" },
+        { id: "rankChart", title: "World Rank" },
+        { id: "dailyPointsChart", title: "Daily Points" },
+        { id: "countryRankChart", title: "Country Rank" }
     ];
     document.getElementById('charts').innerHTML = chartInfo.map(c =>
         `<div class="chart-tile">
