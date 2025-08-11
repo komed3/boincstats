@@ -21,6 +21,7 @@
     box-sizing: border-box;
     outline: 0 none;
     cursor: default;
+    user-select: none;
 }
 
 body {
