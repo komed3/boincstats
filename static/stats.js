@@ -81,7 +81,7 @@ function makeTableSortable(tableId, colNames, data, colLabels, formatCell) {
     let sortCol = 0, sortAsc = false;
     function render(sortedData) {
         const thead = `<tr>${colLabels.map((l, i) =>
-            `<th data-idx="${i}" class="sortable">${l}${sortCol === i ? (sortAsc ? ' ▲' : ' ▼') : ''}</th>`
+            `<th data-idx="${i}" class="sortable ${sortCol === i ? 'active' : ''}">${l}${sortCol === i ? (sortAsc ? ' ▲' : ' ▼') : ''}</th>`
         ).join('')}</tr>`;
         const rows = sortedData.map(row =>
             `<tr>${colNames.map((k, j) => formatCell(k, row[k])).join('')}</tr>`
@@ -170,11 +170,11 @@ async function main() {
         `<td>${formatNumber(v)}</td>`
     );
     makeTableSortable("projectsTable", projectsCols, projects, projectsLabels, (k, v) =>
-        k === "project" ? `<td style="text-align:left">${v.replace(/^"|"$/g, '')}</td>` :
+        k === "project" ? `<td>${v.replace(/^"|"$/g, '')}</td>` :
         `<td>${formatNumber(v)}</td>`
     );
     makeTableSortable("hostsTable", hostsCols, hosts, hostsLabels, (k, v) =>
-        (k === "cpu" || k === "os") ? `<td style="text-align:left">${v}</td>` :
+        (k === "cpu" || k === "os") ? `<td>${v}</td>` :
         `<td>${formatNumber(v)}</td>`
     );
 }

@@ -102,12 +102,12 @@ h2 {
 }
 
 #charts canvas {
+    width: 100% !important;
+    height: 360px !important;
+    padding: 1rem;
     background: var( --highlight );
     border-radius: 10px;
     box-shadow: 0 2px 8px #0001;
-    padding: 1rem;
-    width: 100% !important;
-    height: 300px !important;
 }
 
 /** Tables */
@@ -115,49 +115,64 @@ h2 {
 .table-responsive {
     overflow-x: auto;
 }
+
 table {
-    border-collapse: collapse;
+    margin-bottom: 2rem;
     width: 100%;
     background: var( --highlight );
-    margin-bottom: 2rem;
+    border-collapse: collapse;
     border-radius: 10px;
     box-shadow: 0 2px 8px #0001;
     overflow: hidden;
 }
+
 th, td {
     padding: 0.6em 1em;
-    border-bottom: 1px solid #eee;
     text-align: right;
+    border-bottom: 1px solid #eee;
 }
+
 th {
     background: #f1f5f9;
     color: var( --text );
-    text-align: center;
 }
+
+th:hover, th.active {
+    color: var( --accent );
+    cursor: pointer;
+}
+
 tr:last-child td {
     border-bottom: none;
 }
+
 tr:hover {
     background: #f0f8ff;
 }
 
 /** Responsive Design */
 
-@media (max-width: 900px) {
+@media ( max-width: 900px ) {
+
     #charts {
         grid-template-columns: 1fr;
     }
+
 }
 
-@media (max-width: 600px) {
+@media ( max-width: 600px ) {
+
     main {
         padding: 0.5rem;
     }
+
     .highlight-tile {
-        padding: 1rem;
         min-width: 100px;
+        padding: 1rem;
     }
+
     #charts canvas {
-        height: 220px !important;
+        height: 260px !important;
     }
+
 }
