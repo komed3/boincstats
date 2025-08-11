@@ -45,6 +45,14 @@ header, footer {
     background: var( --text );
 }
 
+header h1 {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2em 1em;
+}
+
 main {
     max-width: 1400px;
     margin: 0 auto;
