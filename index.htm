@@ -1,46 +1,46 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>komed3’s BOINC Stats</title>
-    <link rel="stylesheet" href="static/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-    <header>
-        <h1>komed3’s BOINC Stats</h1>
-    </header>
-    <main>
-        <section id="highlights"></section>
-        <section id="charts">
-            <canvas id="totalPointsChart"></canvas>
-            <canvas id="rankChart"></canvas>
-            <canvas id="dailyPointsChart"></canvas>
-            <canvas id="countryRankChart"></canvas>
-        </section>
-        <section>
-            <h2>Tagesstatistik</h2>
-            <div class="table-responsive">
-                <table id="dailyTable"></table>
-            </div>
-        </section>
-        <section>
-            <h2>Projekte</h2>
-            <div class="table-responsive">
-                <table id="projectsTable"></table>
-            </div>
-        </section>
-        <section>
-            <h2>Hosts</h2>
-            <div class="table-responsive">
-                <table id="hostsTable"></table>
-            </div>
-        </section>
-    </main>
-    <footer>
-        <small>&copy; 2025 komed3 &ndash; BOINC Stats</small>
-    </footer>
-    <script src="static/stats.js"></script>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>komed3’s BOINC Stats</title>
+        <link rel="stylesheet" href="./static/styles.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="./static/stats.min.js" defer></script>
+    </head>
+    <body>
+        <header role="banner">
+            <h1>komed3’s BOINC Stats</h1>
+        </header>
+        <main role="main">
+            <section id="highlights"></section>
+            <section id="charts">
+                <canvas id="totalPointsChart"></canvas>
+                <canvas id="rankChart"></canvas>
+                <canvas id="dailyPointsChart"></canvas>
+                <canvas id="countryRankChart"></canvas>
+            </section>
+            <section>
+                <h2>Daily Stats</h2>
+                <div class="table-responsive">
+                    <table id="dailyTable"></table>
+                </div>
+            </section>
+            <section>
+                <h2>Projects</h2>
+                <div class="table-responsive">
+                    <table id="projectsTable"></table>
+                </div>
+            </section>
+            <section>
+                <h2>Hosts</h2>
+                <div class="table-responsive">
+                    <table id="hostsTable"></table>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <small>&copy; 2025 <a href="https://komed3.de">komed3</a> &ndash; BOINC Stats</small>
+        </footer>
+    </body>
 </html>
