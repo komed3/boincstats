@@ -89,11 +89,16 @@ function highlights ( dailyData ) {
     const daycnt = dailyData.length;
     const latest = dailyData[ dailyData.length - 1 ];
 
-    document.querySelector( `[data-item="total_points"]` ).innerHTML = formatNumber( latest.total );
-    document.querySelector( `[data-item="average_points"]` ).innerHTML = formatNumber( latest.total / daycnt, 1 );
-    document.querySelector( `[data-item="world_rank"]` ).innerHTML = formatNumber( latest.rank );
-    document.querySelector( `[data-item="country_rank"]` ).innerHTML = formatNumber( latest.country_rank );
-    document.querySelector( `[data-item="rank_change"]` ).innerHTML = formatDiff( latest.rank_cng );
+    document.querySelector( `#highlights [data-item="total_points"]` ).innerHTML =
+        formatNumber( latest.total );
+    document.querySelector( `#highlights [data-item="average_points"]` ).innerHTML =
+        formatNumber( latest.total / daycnt, 1 );
+    document.querySelector( `#highlights [data-item="world_rank"]` ).innerHTML =
+        formatNumber( latest.rank );
+    document.querySelector( `#highlights [data-item="country_rank"]` ).innerHTML =
+        formatNumber( latest.country_rank );
+    document.querySelector( `#highlights [data-item="rank_change"]` ).innerHTML =
+        formatDiff( latest.rank_cng );
 
 }
 
