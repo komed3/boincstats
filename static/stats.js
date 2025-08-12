@@ -161,6 +161,8 @@ function renderCharts( dailyData ) {
 
     if ( ! dailyData.length ) return;
 
+    dailyData = dailyData.slice( -60 );
+
     const labels = dailyData.map( r => formatDate( r.date ) );
     const totalPoints = dailyData.map( r => Number ( r.total ) );
     const dailyPoints = dailyData.map( r => Number ( r.daily ) );
@@ -212,6 +214,7 @@ function renderCharts( dailyData ) {
                 grid: { color: '#f3f4f6', lineWidth: 1 },
                 ticks: {
                     color: '#888',
+                    maxTicksLimit: 6,
                     callback: val => formatCompact( val )
                 }
             }
@@ -295,10 +298,15 @@ function renderCharts( dailyData ) {
  * @param {Array} data - The data to populate the table with.
  * @param {Array} colLabels - The labels for the table headers.
  * @param {Function} formatCell - A function to format the cell content based on the column name and value.
+ * @param {number} [initCol=0] - The initial column index to sort by.
+ * @param {boolean} [initDesc=false] - Whether to initially sort in descending order
  */
-function makeTableSortable ( tableId, colNames, data, colLabels, formatCell ) {
+function makeTableSortable (
+    tableId, colNames, data, colLabels, formatCell,
+    initCol = 0, initDesc = false
+) {
 
-    let sortCol = 0, sortAsc = false;
+    let sortCol = initCol, sortAsc = initDesc;
 
     function render ( sortedData ) {
 
@@ -312,7 +320,7 @@ function makeTableSortable ( tableId, colNames, data, colLabels, formatCell ) {
 
         const rows = sortedData.map( row =>
             `<tr>${ colNames.map(
-                ( k, j ) => formatCell( k, row[ k ] )
+                ( k, _ ) => formatCell( k, row[ k ] )
             ).join( '' ) }</tr>`
         ).join( '' );
 
@@ -353,6 +361,9 @@ function makeTableSortable ( tableId, colNames, data, colLabels, formatCell ) {
 
     render( data );
 
+    // Initial sort
+    document.querySelectorAll( `#${tableId} th.sortable` )[ sortCol ].click();
+
 }
 
 /**
@@ -363,7 +374,7 @@ function makeTableSortable ( tableId, colNames, data, colLabels, formatCell ) {
 async function main () {
 
     const dailyCols = [ 'date', 'total', 'daily', 'rank', 'rank_cng', 'team_rank', 'team_cng', 'country_rank', 'country_cng' ];
-    const dailyLabels = [ 'date', 'Total', 'Daily', 'Rank', 'Δ Rank', 'Team Rank', 'Δ Team', 'Country Rank', 'Δ Country' ];
+    const dailyLabels = [ 'Date', 'Total', 'Daily', 'Rank', 'Δ Rank', 'Team Rank', 'Δ Team', 'Country Rank', 'Δ Country' ];
     const projectsCols = [ 'project', 'total', 'share', 'today', 'daily', 'weekly', 'monthly', 'rank', 'rank_cng_day', 'rank_cng_week', 'rank_cng_month', 'team_rank', 'country_rank' ];
     const projectsLabels = [ 'Project', 'Total', 'Share', 'Today', 'Daily', 'Weekly', 'Monthly', 'Rank', 'Δ Day', 'Δ Week', 'Δ Month', 'Team Rank', 'Country Rank' ];
     const hostsCols = [ 'rank', 'cpu', 'cores', 'os', 'total', 'daily', 'weekly', 'monthly', 'avg' ];
@@ -384,7 +395,8 @@ async function main () {
     makeTableSortable( 'dailyTable', dailyCols, daily, dailyLabels, ( k, v ) =>
         k === 'date' ? `<td>${ formatDate( v ) }</td>` :
         k.endsWith( '_cng' ) ? `<td>${ formatDiff( v ) }</td>` :
-        `<td>${ formatNumber( v ) }</td>`
+        `<td>${ formatNumber( v ) }</td>`,
+        0, true
     );
 
     makeTableSortable( 'projectsTable', projectsCols, projects, projectsLabels, ( k, v ) =>
