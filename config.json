@@ -7,6 +7,7 @@
       "url": "https://boincstats.com/stats/-1/user/detail/$uid/lastDays",
       "id": "tblStats",
       "incremental": true,
+      "update": true,
       "cols": {
         "date": "date",
         "total": "int",

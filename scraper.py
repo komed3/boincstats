@@ -129,9 +129,9 @@ def save_to_db ( name: str, opt: dict, data: list ) -> int :
         frow = validate_row( row, cols )
         if not frow:
             continue # Invalid format
-        prop = frow[ 0 ]
-        if prop not in prev:
-            prev[ prop ] = ' '.join( frow[ :len( cols ) ] )
+        test = frow[ 0 ]
+        if opt.get( 'update', False ) or test not in prev:
+            prev[ test ] = ' '.join( frow[ :len( cols ) ] )
     sort = [ prev[ k ] for k in sorted( prev.keys() ) ]
     with open( path, 'w', encoding = 'utf-8' ) as f:
         for line in sort:
