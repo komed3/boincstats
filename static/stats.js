@@ -53,10 +53,10 @@ function formatDiff ( n ) {
 
     const num = Number ( n );
 
-    if ( num > 0 ) return `<diff class="pos">+${formatNumber( num )}</diff>`;
-    if ( num < 0 ) return `<diff class="neg">${formatNumber( num )}</diff>`;
+    if ( num > 0 ) return `<diff class="up">+${formatNumber( num )}</diff>`;
+    if ( num < 0 ) return `<diff class="down">${formatNumber( num )}</diff>`;
 
-    return `<diff class="nul">±${formatNumber( num )}</diff>`;
+    return `<diff class="equal">±${formatNumber( num )}</diff>`;
 
 }
 

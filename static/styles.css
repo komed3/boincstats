@@ -10,9 +10,12 @@
 :root {
     --text: #222;
     --contrast: #fff;
+    --gray: #666;
     --bg: #f8fafc;
     --highlight: #fffd;
     --accent: #3b82f6;
+    --pos: #16a34a;
+    --neg: #dc2626;
 }
 
 /** Global */
@@ -36,6 +39,18 @@ a, a:link, a:visited, a:hover {
     text-decoration: underline;
     color: inherit;
     cursor: pointer;
+}
+
+diff.equal {
+    color: var( --gray );
+}
+
+diff.up {
+    color: var( --pos );
+}
+
+diff.down {
+    color: var( --neg );
 }
 
 header, footer {
