@@ -31,33 +31,71 @@ async function fetchTable(path, colNames, filterZeroCol) {
         });
 }
 
-// Formatierung
-function formatNumber(n) {
-    return n && !isNaN(n) ? Number(n).toLocaleString('en-US') : '-';
-}
-function formatDate(d) {
-    if (!d) return '-';
-    const [y, m, day] = d.split('-');
-    return `${day}.${m}.${y}`;
+/**
+ * Formats a number for display, adding commas as thousands separators.
+ * @param {number} n - The number to format.
+ * @return {string} - The formatted number as a string, or '–' if the input is invalid.
+ */
+function formatNumber ( n ) {
+
+    return n && ! isNaN( n ) ? Number( n ).toLocaleString( 'en-US' ) : '–';
+
 }
 
-// Highlights (Kacheln)
-function renderHighlights(dailyData) {
-    if (!dailyData.length) return;
-    const latest = dailyData[dailyData.length - 1];
-    const tiles = [
-        { label: "Total Points", value: formatNumber(latest.total) },
-        { label: "Daily Points", value: formatNumber(latest.daily) },
-        { label: "World Rank", value: formatNumber(latest.rank) },
-        { label: "Country Rank", value: formatNumber(latest.country_rank) },
-        { label: "1D Change", value: formatNumber(latest.rank_cng) },
-    ];
-    document.getElementById('highlights').innerHTML = tiles.map(tile =>
-        `<div class="highlight-tile">
-            <h3>${tile.label}</h3>
-            <p>${tile.value}</p>
-        </div>`
-    ).join('');
+/**
+ * Formats a difference value, highlighting positive and negative changes.
+ * @param {number} n - The difference value to format.
+ * @return {string} - The formatted difference as a string, with color coding for positive and negative values.
+ */
+function formatDiff ( n ) {
+
+    if ( isNaN( n ) || n === null || n === undefined ) return '–';
+
+    const num = Number ( n );
+
+    if ( num > 0 ) return `<diff class="pos">+${formatNumber( num )}</diff>`;
+    if ( num < 0 ) return `<diff class="neg">${formatNumber( num )}</diff>`;
+
+    return `<diff class="nul">±${formatNumber( num )}</diff>`;
+
+}
+
+/**
+ * Formats a date to a human-readable string.
+ * @param {string|Date} date - The date to format, can be a string or Date object.
+ * @returns {string} - The formatted date as a string in 'MM/DD/YY' format, or '–' if the input is invalid.
+ */
+function formatDate ( date ) {
+
+    return ! date ? '–' : new Date( date ).toLocaleDateString( 'en-US', {
+        year: '2-digit', month: '2-digit', day: '2-digit',
+    } );
+
+}
+
+/**
+ * Outputs the latest highlights from daily data.
+ * @param {Array} dailyData - Array of daily data objects. 
+ */
+function highlights ( dailyData ) {
+
+    if ( ! dailyData.length ) return;
+
+    const latest = dailyData[ dailyData.length - 1 ];
+
+    for ( const [ item, key, fnc ] of [
+        [ 'total_points', 'total', 'formatNumber' ],
+        [ 'daily_points', 'daily', 'formatNumber' ],
+        [ 'world_rank', 'rank', 'formatNumber' ],
+        [ 'country_rank', 'country_rank', 'formatNumber' ],
+        [ 'rank_change', 'rank_cng', 'formatDiff' ]
+    ] ) {
+
+        document.querySelector( `[data-item="${item}"]` ).innerHTML =
+            window[ fnc ]( latest[ key ] );
+
+    }
+
 }
 
 // Chart-Kacheln mit Titel
@@ -160,7 +198,7 @@ async function main() {
         fetchTable('db/hosts', hostsCols)
     ]);
 
-    renderHighlights(daily);
+    highlights(daily);
     renderChartTiles();
     renderCharts(daily);
 
