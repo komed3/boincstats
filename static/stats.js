@@ -1,34 +1,65 @@
-// CSV-Parser: unterstützt Felder mit Anführungszeichen und Leerzeichen
-function parseCSVLine(line) {
+/**
+ * Parses a CSV line into an array of fields, handling quoted fields and spaces.
+ * Handles quoted fields and ignores spaces outside quotes.
+ * @param {string} line - The CSV line to parse.
+ * @return {Array} - An array of fields extracted from the CSV line.
+ */
+function parseCSVLine ( line ) {
+
     const result = [];
+
     let inQuotes = false, field = '';
-    for (let i = 0; i < line.length; ++i) {
-        const c = line[i];
-        if (c === '"') inQuotes = !inQuotes;
-        else if (c === ' ' && !inQuotes) {
-            if (field.length) { result.push(field); field = ''; }
-            while (line[i + 1] === ' ') ++i;
-        } else field += c;
+
+    for ( let i = 0; i < line.length; ++i ) {
+
+        const c = line[ i ];
+
+        if ( c === '"' ) inQuotes = ! inQuotes;
+        else if ( c === ' ' && ! inQuotes ) {
+
+            if ( field.length ) { result.push( field ); field = ''; }
+            while ( line[ i + 1 ] === ' ') ++i;
+
+        }
+        else field += c;
+
     }
-    if (field.length) result.push(field);
+
+    if ( field.length ) result.push( field );
+
     return result;
+
 }
 
-// Daten laden, Null-Werte filtern
-async function fetchTable(path, colNames, filterZeroCol) {
-    const resp = await fetch(path);
-    if (!resp.ok) return [];
+/**
+ * Fetches a CSV table from the given path, parses it, and returns an array of objects.
+ * @param {string} path - The path to the CSV file.
+ * @param {Array} colNames - The names of the columns to extract.
+ * @param {string} [filterZeroCol] - Optional column name to filter out rows with zero values.
+ * @return {Promise<Array>} - A promise that resolves to an array of objects representing the table.
+ */
+async function fetchTable ( path, colNames, filterZeroCol ) {
+
+    const resp = await fetch( path );
+
+    if ( ! resp.ok ) return [];
+
     const text = await resp.text();
+
     return text
-        .split('\n')
-        .filter(line => line.trim())
-        .map(parseCSVLine)
-        .filter(cols => !filterZeroCol || (cols[colNames.indexOf(filterZeroCol)] !== "0" && cols[colNames.indexOf(filterZeroCol)] !== "0.0"))
-        .map(cols => {
+        .split( '\n' )
+        .filter( line => line.trim() )
+        .map( parseCSVLine )
+        .filter( cols => ! filterZeroCol || (
+            cols[ colNames.indexOf( filterZeroCol ) ] !== '0' &&
+            cols[ colNames.indexOf( filterZeroCol ) ] !== '0.0'
+        ) )
+        .map( cols => {
             let obj = {};
-            colNames.forEach((k, i) => obj[k] = cols[i]);
+            colNames.forEach( ( k, i ) => obj[ k ] = cols[ i ] );
             return obj;
-        });
+        } );
+
 }
 
 /**
@@ -100,35 +131,6 @@ function renderHighlights ( dailyData ) {
     document.querySelector( `#highlights [data-item="rank_change"]` ).innerHTML =
         formatDiff( latest.rank_cng );
 
-}
-
-// Tabellen sortierbar machen
-function makeTableSortable(tableId, colNames, data, colLabels, formatCell) {
-    let sortCol = 0, sortAsc = false;
-    function render(sortedData) {
-        const thead = `<tr>${colLabels.map((l, i) =>
-            `<th data-idx="${i}" class="sortable ${sortCol === i ? 'active' : ''}">${l}${sortCol === i ? (sortAsc ? ' ▲' : ' ▼') : ''}</th>`
-        ).join('')}</tr>`;
-        const rows = sortedData.map(row =>
-            `<tr>${colNames.map((k, j) => formatCell(k, row[k])).join('')}</tr>`
-        ).join('');
-        document.getElementById(tableId).innerHTML = `<thead>${thead}</thead><tbody>${rows}</tbody>`;
-        // Event-Listener für Sortierung
-        document.querySelectorAll(`#${tableId} th.sortable`).forEach(th => {
-            th.onclick = () => {
-                const idx = Number(th.dataset.idx);
-                if (sortCol === idx) sortAsc = !sortAsc; else { sortCol = idx; sortAsc = true; }
-                const key = colNames[sortCol];
-                const sorted = [...data].sort((a, b) => {
-                    let va = a[key], vb = b[key];
-                    if (!isNaN(va) && !isNaN(vb)) { va = Number(va); vb = Number(vb); }
-                    return (va > vb ? 1 : va < vb ? -1 : 0) * (sortAsc ? 1 : -1);
-                });
-                render(sorted);
-            };
-        });
-    }
-    render(data);
 }
 
 /**
@@ -226,6 +228,35 @@ function renderCharts( dailyData ) {
         } }
     } );
 
+}
+
+// Tabellen sortierbar machen
+function makeTableSortable(tableId, colNames, data, colLabels, formatCell) {
+    let sortCol = 0, sortAsc = false;
+    function render(sortedData) {
+        const thead = `<tr>${colLabels.map((l, i) =>
+            `<th data-idx="${i}" class="sortable ${sortCol === i ? 'active' : ''}">${l}${sortCol === i ? (sortAsc ? ' ▲' : ' ▼') : ''}</th>`
+        ).join('')}</tr>`;
+        const rows = sortedData.map(row =>
+            `<tr>${colNames.map((k, j) => formatCell(k, row[k])).join('')}</tr>`
+        ).join('');
+        document.getElementById(tableId).innerHTML = `<thead>${thead}</thead><tbody>${rows}</tbody>`;
+        // Event-Listener für Sortierung
+        document.querySelectorAll(`#${tableId} th.sortable`).forEach(th => {
+            th.onclick = () => {
+                const idx = Number(th.dataset.idx);
+                if (sortCol === idx) sortAsc = !sortAsc; else { sortCol = idx; sortAsc = true; }
+                const key = colNames[sortCol];
+                const sorted = [...data].sort((a, b) => {
+                    let va = a[key], vb = b[key];
+                    if (!isNaN(va) && !isNaN(vb)) { va = Number(va); vb = Number(vb); }
+                    return (va > vb ? 1 : va < vb ? -1 : 0) * (sortAsc ? 1 : -1);
+                });
+                render(sorted);
+            };
+        });
+    }
+    render(data);
 }
 
 // Hauptfunktion
