@@ -66,7 +66,7 @@ header h1 {
 main {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 3rem 0;
+    padding: 3rem 1rem;
 }
 
 h2 {
@@ -85,13 +85,13 @@ h2 {
 }
 
 .highlight-tile {
-    flex: 1 1 120px;
+    flex: 1 1 200px;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
     gap: 0.4rem;
-    min-width: 140px;
+    min-width: 200px;
     padding: 1.2rem 2rem;
     text-align: center;
     background: var( --highlight );
@@ -107,6 +107,7 @@ h2 {
 
 .highlight-tile p {
     margin: 0;
+    white-space: nowrap;
     font-size: 1.6em;
     font-weight: bold;
 }
@@ -115,7 +116,7 @@ h2 {
 
 #charts {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat( 2, 1fr );
     gap: 2rem;
     margin-bottom: 2rem;
 }
@@ -159,6 +160,7 @@ table {
 th, td {
     padding: 0.6em 1em;
     text-align: right;
+    white-space: nowrap;
     border-bottom: 1px solid #eee;
 }
 
@@ -184,10 +186,14 @@ tr:hover {
 
 /** Responsive Design */
 
-@media ( max-width: 900px ) {
+@media ( max-width: 1200px ) {
 
     #charts {
         grid-template-columns: 1fr;
+    }
+
+    h2, .chart-tile h3 {
+        text-align: center;
     }
 
 }
