@@ -10,7 +10,6 @@
 :root {
     --text: #222;
     --contrast: #fff;
-    --gray: #666;
     --bg: #f8fafc;
     --highlight: #fffd;
     --accent: #3b82f6;
@@ -39,10 +38,6 @@ a, a:link, a:visited, a:hover {
     text-decoration: underline;
     color: inherit;
     cursor: pointer;
-}
-
-diff.equal {
-    color: var( --gray );
 }
 
 diff.up {
@@ -152,7 +147,6 @@ h2 {
 }
 
 table {
-    margin-bottom: 2rem;
     width: 100%;
     background: var( --highlight );
     border-collapse: collapse;
