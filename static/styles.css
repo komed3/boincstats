@@ -143,15 +143,16 @@ h2 {
 /** Tables */
 
 .table-responsive {
-    overflow-x: auto;
+    overflow: auto;
+    max-height: 600px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #0001;
 }
 
 table {
     width: 100%;
     background: var( --highlight );
     border-collapse: collapse;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px #0001;
     overflow: hidden;
 }
 
@@ -162,8 +163,10 @@ th, td {
 }
 
 th {
-    background: #f1f5f9;
+    position: sticky;
+    top: 0;
     color: var( --text );
+    background: #f1f5f9;
 }
 
 th:hover, th.active {
