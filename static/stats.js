@@ -34,29 +34,34 @@ async function fetchTable(path, colNames, filterZeroCol) {
 /**
  * Formats a number for display, adding commas as thousands separators.
  * @param {number} n - The number to format.
+ * @param {number} [d=0] - The number of decimal places to include.
  * @return {string} - The formatted number as a string, or '–' if the input is invalid.
  */
-function formatNumber ( n ) {
+function formatNumber ( n, d = 0 ) {
 
-    return n && ! isNaN( n ) ? Number( n ).toLocaleString( 'en-US' ) : '–';
+    return n && ! isNaN( n ) ? Number( n ).toLocaleString( 'en-US', {
+        minimumFractionDigits: d,
+        maximumFractionDigits: d
+    } ) : '–';
 
 }
 
 /**
  * Formats a difference value, highlighting positive and negative changes.
  * @param {number} n - The difference value to format.
+ * @param {number} [d=0] - The number of decimal places to include.
  * @return {string} - The formatted difference as a string, with color coding for positive and negative values.
  */
-function formatDiff ( n ) {
+function formatDiff ( n, d = 0 ) {
 
     if ( isNaN( n ) || n === null || n === undefined ) return '–';
 
     const num = Number ( n );
 
-    if ( num > 0 ) return `<diff class="up">+${formatNumber( num )}</diff>`;
-    if ( num < 0 ) return `<diff class="down">${formatNumber( num )}</diff>`;
+    if ( num > 0 ) return `<diff class="up">+${formatNumber( num, d )}</diff>`;
+    if ( num < 0 ) return `<diff class="down">${formatNumber( num, d )}</diff>`;
 
-    return `<diff class="equal">±${formatNumber( num )}</diff>`;
+    return `<diff class="equal">±${formatNumber( num, d )}</diff>`;
 
 }
 
@@ -81,20 +86,14 @@ function highlights ( dailyData ) {
 
     if ( ! dailyData.length ) return;
 
+    const daycnt = dailyData.length;
     const latest = dailyData[ dailyData.length - 1 ];
 
-    for ( const [ item, key, fnc ] of [
-        [ 'total_points', 'total', 'formatNumber' ],
-        [ 'daily_points', 'daily', 'formatNumber' ],
-        [ 'world_rank', 'rank', 'formatNumber' ],
-        [ 'country_rank', 'country_rank', 'formatNumber' ],
-        [ 'rank_change', 'rank_cng', 'formatDiff' ]
-    ] ) {
-
-        document.querySelector( `[data-item="${item}"]` ).innerHTML =
-            window[ fnc ]( latest[ key ] );
-
-    }
+    document.querySelector( `[data-item="total_points"]` ).innerHTML = formatNumber( latest.total );
+    document.querySelector( `[data-item="average_points"]` ).innerHTML = formatNumber( latest.total / daycnt, 1 );
+    document.querySelector( `[data-item="world_rank"]` ).innerHTML = formatNumber( latest.rank );
+    document.querySelector( `[data-item="country_rank"]` ).innerHTML = formatNumber( latest.country_rank );
+    document.querySelector( `[data-item="rank_change"]` ).innerHTML = formatDiff( latest.rank_cng );
 
 }
 
