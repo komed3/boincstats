@@ -78,6 +78,22 @@ function formatNumber ( n, d = 0 ) {
 }
 
 /**
+ * Formats a number into a compact form (K, M, B) for easier readability.
+ * @param {number} n - The number to format.
+ * @returns {string} - The formatted number as a string.
+ */
+function formatCompact ( n ) {
+
+    n = Number ( n );
+
+    if ( isNaN( n ) ) return '–';
+    if ( Math.abs( n ) >= 1e6 ) return ( n / 1e6 ).toFixed( 1 ).replace( /\.0$/, '' ) + 'M';
+    if ( Math.abs( n ) >= 1e3 ) return ( n / 1e3 ).toFixed( 1 ).replace( /\.0$/, '' ) + 'k';
+    return n.toString();
+
+}
+
+/**
  * Formats a difference value, highlighting positive and negative changes.
  * @param {number} n - The difference value to format.
  * @param {number} [d=0] - The number of decimal places to include.
@@ -151,16 +167,54 @@ function renderCharts( dailyData ) {
     const rank = dailyData.map( r => Number ( r.rank ) );
     const countryRank = dailyData.map( r => Number ( r.country_rank ) );
 
+    Chart.defaults.font.family = '"Archivo", sans-serif';
+
     const chartOpts = {
         responsive: true,
         plugins: {
             legend: { display: false },
-            tooltip: { enabled: true, mode: 'index', intersect: false }
+            tooltip: {
+                enabled: true,
+                mode: 'index',
+                intersect: false,
+                padding: {
+                    top: 10, left: 10,
+                    right: 24, bottom: 8
+                },
+                displayColors: false,
+                titleMarginBottom: 0,
+                titleFont: { size: 13 },
+                titleColor: '#222',
+                bodyFont: { size: 20 },
+                bodyColor: '#3b82f6',
+                borderColor: '#3b82f6',
+                backgroundColor: '#fff',
+                borderWidth: 1,
+                callbacks: {
+                    title: items => items[ 0 ].label,
+                    label: ctx => {
+                        return formatNumber( ctx.parsed.y );
+                    }
+                }
+            }
         },
         elements: { point: { radius: 0 }, line: { borderWidth: 3 } },
         scales: {
-            x: { grid: { color: '#f3f4f6', lineWidth: 1 } },
-            y: { grid: { color: '#f3f4f6', lineWidth: 1 }, ticks: { color: '#888' } }
+            x: {
+                grid: { color: '#f3f4f6', lineWidth: 1 },
+                ticks: {
+                    color: '#888',
+                    maxRotation: 0,
+                    minRotation: 0
+                }
+            },
+            y: {
+                grid: { color: '#f3f4f6', lineWidth: 1 },
+                ticks: {
+                    color: '#888',
+                    callback: val => formatCompact( val )
+                }
+            }
         }
     };
 
