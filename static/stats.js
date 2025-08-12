@@ -82,7 +82,7 @@ function formatDate ( date ) {
  * Outputs the latest highlights from daily data.
  * @param {Array} dailyData - Array of daily data objects. 
  */
-function highlights ( dailyData ) {
+function renderHighlights ( dailyData ) {
 
     if ( ! dailyData.length ) return;
 
@@ -100,22 +100,6 @@ function highlights ( dailyData ) {
     document.querySelector( `#highlights [data-item="rank_change"]` ).innerHTML =
         formatDiff( latest.rank_cng );
 
-}
-
-// Chart-Kacheln mit Titel
-function renderChartTiles() {
-    const chartInfo = [
-        { id: "totalPointsChart", title: "Total Points" },
-        { id: "rankChart", title: "World Rank" },
-        { id: "dailyPointsChart", title: "Daily Points" },
-        { id: "countryRankChart", title: "Country Rank" }
-    ];
-    document.getElementById('charts').innerHTML = chartInfo.map(c =>
-        `<div class="chart-tile">
-            <h3>${c.title}</h3>
-            <canvas id="${c.id}"></canvas>
-        </div>`
-    ).join('');
 }
 
 // Tabellen sortierbar machen
@@ -147,43 +131,101 @@ function makeTableSortable(tableId, colNames, data, colLabels, formatCell) {
     render(data);
 }
 
-// Charts
-function renderCharts(dailyData) {
-    if (!dailyData.length) return;
-    const labels = dailyData.map(r => formatDate(r.date));
-    const totalPoints = dailyData.map(r => Number(r.total));
-    const dailyPoints = dailyData.map(r => Number(r.daily));
-    const rank = dailyData.map(r => Number(r.rank));
-    const countryRank = dailyData.map(r => Number(r.country_rank));
+/**
+ * Renders charts based on daily data.
+ * @param {Array} dailyData - Array of daily data objects, each containing date, total points, daily points, rank, and country rank.
+ */
+function renderCharts( dailyData ) {
+
+    if ( ! dailyData.length ) return;
+
+    const labels = dailyData.map( r => formatDate( r.date ) );
+    const totalPoints = dailyData.map( r => Number ( r.total ) );
+    const dailyPoints = dailyData.map( r => Number ( r.daily ) );
+    const rank = dailyData.map( r => Number ( r.rank ) );
+    const countryRank = dailyData.map( r => Number ( r.country_rank ) );
+
     const chartOpts = {
         responsive: true,
-        plugins: { legend: { display: false }, tooltip: { enabled: true, mode: 'index', intersect: false } },
+        plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true, mode: 'index', intersect: false }
+        },
         elements: { point: { radius: 0 }, line: { borderWidth: 3 } },
         scales: {
-            x: { grid: { display: false } },
-            y: { grid: { color: '#e5e7eb', lineWidth: 1 }, ticks: { color: '#888' } }
+            x: { grid: { color: '#f3f4f6', lineWidth: 1 } },
+            y: { grid: { color: '#f3f4f6', lineWidth: 1 }, ticks: { color: '#888' } }
         }
     };
-    new Chart(document.getElementById('totalPointsChart').getContext('2d'), {
+
+    new Chart( document.getElementById( 'totalPointsChart' ).getContext( '2d' ), {
         type: 'line',
-        data: { labels, datasets: [{ label: 'Gesamtpunkte', data: totalPoints, borderColor: '#3b82f6', backgroundColor: '#3b82f633', fill: false }] },
+        data: { labels, datasets: [ {
+            label: 'Total Points',
+            data: totalPoints,
+            borderColor: '#3b82f6',
+            backgroundColor: '#3b82f611',
+            fill: true
+        } ] },
         options: chartOpts
-    });
-    new Chart(document.getElementById('rankChart').getContext('2d'), {
+    } );
+
+    new Chart( document.getElementById( 'rankChart' ).getContext( '2d' ), {
         type: 'line',
-        data: { labels, datasets: [{ label: 'Gesamtrang', data: rank, borderColor: '#22c55e', backgroundColor: '#22c55e33', fill: false }] },
-        options: { ...chartOpts, scales: { ...chartOpts.scales, y: { ...chartOpts.scales.y, reverse: true } } }
-    });
-    new Chart(document.getElementById('dailyPointsChart').getContext('2d'), {
+        data: { labels, datasets: [ {
+            label: 'World Rank',
+            data: rank,
+            borderColor: '#22c55e',
+            backgroundColor: '#22c55e11',
+            fill: true,
+            stepped: true
+        } ] },
+        options: { ...chartOpts, scales: {
+            ...chartOpts.scales, y: {
+                ...chartOpts.scales.y,
+                reverse: true
+            }
+        } }
+    } );
+
+    new Chart( document.getElementById( 'dailyPointsChart' ).getContext( '2d' ), {
         type: 'bar',
-        data: { labels, datasets: [{ label: 'Tagespunkte', data: dailyPoints, backgroundColor: '#fbbf24' }] },
-        options: { ...chartOpts, elements: { bar: { borderRadius: 3 } } }
-    });
-    new Chart(document.getElementById('countryRankChart').getContext('2d'), {
+        data: { labels, datasets: [ {
+            label: 'Daily Points',
+            data: dailyPoints,
+            backgroundColor: '#fbbf24'
+        } ] },
+        options: { ...chartOpts, elements: {
+            bar: { borderRadius: 3 }
+        }, scales: {
+            ...chartOpts.scales, x: {
+                ...chartOpts.scales.x,
+                offset: true
+            }, y: {
+                ...chartOpts.scales.y,
+                min: 0
+            }
+        } }
+    } );
+
+    new Chart( document.getElementById( 'countryRankChart' ).getContext( '2d' ), {
         type: 'line',
-        data: { labels, datasets: [{ label: 'Länderrang', data: countryRank, borderColor: '#8b5cf6', backgroundColor: '#8b5cf633', fill: false }] },
-        options: { ...chartOpts, scales: { ...chartOpts.scales, y: { ...chartOpts.scales.y, reverse: true } } }
-    });
+        data: { labels, datasets: [ {
+            label: 'Country Rank',
+            data: countryRank,
+            borderColor: '#8b5cf6',
+            backgroundColor: '#8b5cf611',
+            fill: true,
+            stepped: true
+        } ] },
+        options: { ...chartOpts, scales: {
+            ...chartOpts.scales, y: {
+                ...chartOpts.scales.y,
+                reverse: true
+            }
+        } }
+    } );
+
 }
 
 // Hauptfunktion
@@ -202,9 +244,8 @@ async function main() {
         fetchTable('db/hosts', hostsCols)
     ]);
 
-    highlights(daily);
-    renderChartTiles();
-    renderCharts(daily);
+    renderHighlights( daily );
+    renderCharts( daily );
 
     // Tabellen sortierbar machen
     makeTableSortable("dailyTable", dailyCols, daily, dailyLabels, (k, v) =>
