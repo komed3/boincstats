@@ -159,20 +159,22 @@ h2 {
 }
 
 #range-buttons button {
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
     font-family: inherit;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var( --accent );
     background: var( --highlight );
     border: none;
-    border-radius: 6px;
-    transition: background 0.15s, color 0.15s;
+    border-radius: 3px;
     cursor: pointer;
 }
 
-#range-buttons button.active,
 #range-buttons button:hover {
+    background: var( --contrast );
+}
+
+#range-buttons button.active {
     color: var( --contrast );
     background: var( --accent );
 }
@@ -230,6 +232,10 @@ tr:hover {
 
     h2, .chart-tile h3 {
         text-align: center;
+    }
+
+    #range-buttons {
+        justify-content: center;
     }
 
 }
