@@ -199,3 +199,83 @@ function renderTable (
     document.querySelectorAll( `#${tableId} th.sortable` )[ sortCol ].click();
 
 }
+
+/**
+ * Renders a Chart.js chart based on the provided options.
+ * @param {HTMLCanvasElement} canvas - The canvas element to render the chart on.
+ * @param {Object} opts - Options for the chart (e.g. labels, data, color, type, ...).
+ * @param {Object} [range] - Optional range to limit the data displayed in the chart.
+ * @param {Object} [extra] - Additional Chart.js options to apply.
+ */
+function renderChart ( canvas, opts, range, extra ) {
+
+    const { labels, data, label, color, type, reverseY, isBar } = opts;
+
+    // Limit range
+    let start = range?.start ?? labels.length - 60,
+        end = range?.end ?? labels.length;
+
+    const l = labels.slice( start, end ),
+          d = data.slice( start, end );
+
+    return new Chart( canvas.getContext( '2d' ), {
+        type: type || ( isBar ? 'bar' : 'line' ),
+        data: {
+            labels: l,
+            datasets: [ {
+                label: label,
+                data: d,
+                borderColor: color,
+                backgroundColor: color + '11',
+                fill: ! isBar,
+                stepped: !! opts.stepped,
+                ...( isBar ? {
+                    borderRadius: 3
+                } : {
+                    pointRadius: 0,
+                    borderWidth: 3
+                } )
+            } ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    enabled: true,
+                    mode: 'index',
+                    intersect: false,
+                    displayColors: false,
+                    bodyFont: { size: 20, family: '"Archivo", sans-serif' },
+                    titleFont: { size: 13, family: '"Archivo", sans-serif' },
+                    callbacks: {
+                        title: items => items[ 0 ].label,
+                        label: ctx => formatNumber( ctx.parsed.y )
+                    }
+                }
+            },
+            elements: { point: { radius: 0 }, line: { borderWidth: 3 } },
+            scales: {
+                x: {
+                    grid: { color: '#f3f4f6', lineWidth: 1 },
+                    ticks: {
+                        color: '#888',
+                        maxRotation: 0,
+                        minRotation: 0
+                    }
+                },
+                y: {
+                    grid: { color: '#f3f4f6', lineWidth: 1 },
+                    ticks: {
+                        color: '#888',
+                        maxTicksLimit: 6,
+                        callback: val => formatCompact( val )
+                    },
+                    reverse: !! reverseY
+                }
+            },
+            ...extra
+        }
+    } );
+
+}
