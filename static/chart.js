@@ -11,63 +11,50 @@ async function main () {
     const data = await fetchTable( 'db/daily', dailyCols, 'total' );
     const labels = data.map( r => formatDate( r.date ) );
     const values = data.map( r => Number ( r[ cfg.col ] ) );
+    const canvas = document.getElementById( cfg.id );
 
-    // Dynamic range selection
-    let maxPoints = Math.max( 30, Math.floor( window.innerWidth / 24 ) ),
-        start = Math.max( 0, values.length - maxPoints ),
-        end = values.length,
-        chart;
+    // Range buttons
+    const btns = Array.from( document.querySelectorAll( '#range-buttons button' ) );
 
-    // Render chart
-    function updateChart () {
+    // Render chart for defined range (max. number of days)
+    let chart;
+
+    function renderChartForRange ( range ) {
 
         if ( chart ) chart.destroy();
 
+        let len = range === 'max' ? labels.length : Math.min( labels.length, Number ( range ) );
+        let start = Math.max( 0, labels.length - len );
+
         chart = renderChart(
-            document.getElementById( cfg.id ),
+            canvas,
             {
-                labels,
-                data: values,
+                labels: labels.slice( start ),
+                data: values.slice( start ),
                 label: cfg.label,
                 color: cfg.color,
                 type: cfg.isBar ? 'bar' : 'line',
                 reverseY: cfg.reverseY,
                 isBar: cfg.isBar,
                 stepped: cfg.stepped
-            },
-            { start, end }
+            }
         );
 
     }
 
-    // Range Controls
-    function renderControls() {
+    // Add event listener for range buttons
+    btns.forEach( btn => { btn.onclick = () => {
 
-        const rc = document.getElementById( 'range-controls' );
+        btns.forEach( b => b.classList.remove( 'active' ) );
+        btn.classList.add( 'active' );
 
-        rc.innerHTML = `
-            <label>Range: </label>
-            <input type="range" min="10" max="${values.length}" value="${end-start}" id="rangeLen" style="width:200px;" />
-            <span id="rangeLabel">${end-start} days</span>
-        `;
+        renderChartForRange( btn.dataset.range );
 
-        document.getElementById( 'rangeLen' ).oninput = e => {
+    } } );
 
-            let len = Number ( e.target.value );
-
-            start = Math.max( 0, values.length - len );
-            end = values.length;
-
-            document.getElementById( 'rangeLabel' ).textContent = `${len} days`;
-
-            updateChart();
-
-        };
-
-    }
-
-    renderControls();
-    updateChart();
+    // Initialize chart with range 3M (90 days)
+    btns[ 2 ].classList.add( 'active' );
+    renderChartForRange( 90 );
 
 }
 
