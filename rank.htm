@@ -23,12 +23,14 @@
                 <a href="index.htm">&larr; Go back</a>
                 <h2>World Rank</h2>
             </section>
-            <section id="bigchart">
-                <div id="range-controls">
-                    <label for="rangeStart">Range</label>
-                    <input type="range" id="rangeStart" min="0" max="90" value="0" />
-                    <input type="range" id="rangeEnd" min="10" max="100" value="100" />
-                    <span id="rangeLabel"></span>
+            <section>
+                <div id="range-buttons">
+                    <button data-range="14">2W</button>
+                    <button data-range="30">1M</button>
+                    <button data-range="90">3M</button>
+                    <button data-range="180">6M</button>
+                    <button data-range="365">1Y</button>
+                    <button data-range="max">MAX</button>
                 </div>
                 <div class="chart-canvas big-canvas">
                     <canvas id="worldRankChart"></canvas>

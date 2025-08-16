@@ -148,36 +148,33 @@ h2 {
     min-height: 360px;
 }
 
-/** Range Controls */
+/** Range Buttons */
 
-#range-controls {
+#range-buttons {
     display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    gap: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.5rem;
     margin: 1.5rem 0 1rem 0;
-    padding: 1rem 1.6rem;
+}
+
+#range-buttons button {
+    padding: 0.5rem 1rem;
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var( --accent );
     background: var( --highlight );
-    border-radius: 10px;
-    box-shadow: 0 2px 8px #0001;
+    border: none;
+    border-radius: 6px;
+    transition: background 0.15s, color 0.15s;
+    cursor: pointer;
 }
 
-#range-controls label {
-    margin-right: 1.4rem;
-    text-transform: uppercase;
-}
-
-#range-controls input[type="range"] {
-    flex: 1;
-    margin: 0;
-    width: auto;
-    accent-color: var( --accent );
-}
-
-#range-controls span {
-    flex: 0 0 200px;
-    margin-left: 1.4rem;
-    text-align: right;
+#range-buttons button.active,
+#range-buttons button:hover {
+    color: var( --contrast );
+    background: var( --accent );
 }
 
 /** Tables */
