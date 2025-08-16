@@ -141,6 +141,13 @@ h2 {
     height: 360px;
 }
 
+.chart-canvas.big-canvas canvas {
+    aspect-ratio: 16 / 7;
+    width: 100%;
+    height: auto;
+    min-height: 360px;
+}
+
 /** Tables */
 
 .table-responsive {
