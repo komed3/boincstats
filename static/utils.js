@@ -274,7 +274,9 @@ function renderChart ( canvas, opts, range, extra ) {
                     ticks: {
                         color: '#888',
                         maxRotation: 0,
-                        minRotation: 0
+                        minRotation: 0,
+                        autoSkip: true,
+                        maxTicksLimit: 6
                     }
                 },
                 y: {
