@@ -148,6 +148,38 @@ h2 {
     min-height: 360px;
 }
 
+/** Range Controls */
+
+#range-controls {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    gap: 0;
+    margin: 1.5rem 0 1rem 0;
+    padding: 1rem 1.6rem;
+    background: var( --highlight );
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #0001;
+}
+
+#range-controls label {
+    margin-right: 1.4rem;
+    text-transform: uppercase;
+}
+
+#range-controls input[type="range"] {
+    flex: 1;
+    margin: 0;
+    width: auto;
+    accent-color: var( --accent );
+}
+
+#range-controls span {
+    flex: 0 0 200px;
+    margin-left: 1.4rem;
+    text-align: right;
+}
+
 /** Tables */
 
 .table-responsive {

@@ -24,7 +24,12 @@
                 <h2>Country Rank</h2>
             </section>
             <section id="bigchart">
-                <div id="range-controls"></div>
+                <div id="range-controls">
+                    <label for="rangeStart">Range</label>
+                    <input type="range" id="rangeStart" min="0" max="90" value="0" />
+                    <input type="range" id="rangeEnd" min="10" max="100" value="100" />
+                    <span id="rangeLabel"></span>
+                </div>
                 <div class="chart-canvas big-canvas">
                     <canvas id="countryRankChart"></canvas>
                 </div>
