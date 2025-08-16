@@ -165,81 +165,6 @@ function renderCharts( dailyData ) {
 }
 
 /**
- * Makes a table sortable by clicking on the column headers.
- * @param {string} tableId - The ID of the table to make sortable.
- * @param {Array} colNames - The names of the columns to sort by.
- * @param {Array} data - The data to populate the table with.
- * @param {Array} colLabels - The labels for the table headers.
- * @param {Function} formatCell - A function to format the cell content based on the column name and value.
- * @param {number} [initCol=0] - The initial column index to sort by.
- * @param {boolean} [initDesc=false] - Whether to initially sort in descending order
- */
-function makeTableSortable (
-    tableId, colNames, data, colLabels, formatCell,
-    initCol = 0, initDesc = false
-) {
-
-    let sortCol = initCol, sortAsc = initDesc;
-
-    function render ( sortedData ) {
-
-        const thead = `<tr>${ colLabels.map( ( l, i ) =>
-            `<th data-idx="${i}" class="sortable ${ (
-                sortCol === i ? 'active' : ''
-            ) }">${l}${ (
-                sortCol === i ? ( sortAsc ? ' ▲' : ' ▼' ) : ''
-            ) }</th>`
-        ).join( '' ) }</tr>`;
-
-        const rows = sortedData.map( row =>
-            `<tr>${ colNames.map(
-                ( k, _ ) => formatCell( k, row[ k ] )
-            ).join( '' ) }</tr>`
-        ).join( '' );
-
-        document.getElementById( tableId ).innerHTML = `<thead>${thead}</thead><tbody>${rows}</tbody>`;
-
-        // Event-Listener for sorting columns
-        document.querySelectorAll( `#${tableId} th.sortable` ).forEach( th => {
-
-            th.onclick = () => {
-
-                const idx = Number ( th.dataset.idx );
-
-                if ( sortCol === idx ) { sortAsc = ! sortAsc; }
-                else { sortCol = idx; sortAsc = true; }
-
-                const key = colNames[ sortCol ];
-
-                const sorted = [ ...data ].sort( ( a, b ) => {
-
-                    let va = a[ key ], vb = b[ key ];
-
-                    if ( ! isNaN( va ) && ! isNaN( vb ) ) {
-                        va = Number ( va );
-                        vb = Number ( vb );
-                    }
-
-                    return ( va > vb ? 1 : va < vb ? -1 : 0 ) * ( sortAsc ? 1 : -1 );
-
-                } );
-
-                render( sorted );
-
-            };
-
-        } );
-
-    }
-
-    render( data );
-
-    // Initial sort
-    document.querySelectorAll( `#${tableId} th.sortable` )[ sortCol ].click();
-
-}
-
-/**
  * Main Function
  * Initializes the page by fetching data and rendering tables and charts.
  * This function is called when the DOM content is fully loaded.
@@ -265,20 +190,20 @@ async function main () {
     renderCharts( daily );
 
     // Render sortable tables
-    makeTableSortable( 'dailyTable', dailyCols, daily, dailyLabels, ( k, v ) =>
+    renderTable( 'dailyTable', dailyCols, daily, dailyLabels, ( k, v ) =>
         k === 'date' ? `<td>${ formatDate( v ) }</td>` :
         k.endsWith( '_cng' ) ? `<td>${ formatDiff( v ) }</td>` :
         `<td>${ formatNumber( v ) }</td>`,
         0, true
     );
 
-    makeTableSortable( 'projectsTable', projectsCols, projects, projectsLabels, ( k, v ) =>
+    renderTable( 'projectsTable', projectsCols, projects, projectsLabels, ( k, v ) =>
         k === 'project' ? `<td>${ v.replace( /^"|"$/g, '' ) }</td>` :
         k.startsWith( 'rank_cng_' ) ? `<td>${ formatDiff( v ) }</td>` :
         `<td>${ formatNumber( v ) }</td>`
     );
 
-    makeTableSortable( 'hostsTable', hostsCols, hosts, hostsLabels, ( k, v ) =>
+    renderTable( 'hostsTable', hostsCols, hosts, hostsLabels, ( k, v ) =>
         k === 'cpu' || k === 'os' ? `<td>${v}</td>` :
         `<td>${ formatNumber( v ) }</td>`
     );

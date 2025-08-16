@@ -124,3 +124,78 @@ function formatDate ( date ) {
     } );
 
 }
+
+/**
+ * Makes a table sortable by clicking on the column headers.
+ * @param {string} tableId - The ID of the table to make sortable.
+ * @param {Array} colNames - The names of the columns to sort by.
+ * @param {Array} data - The data to populate the table with.
+ * @param {Array} colLabels - The labels for the table headers.
+ * @param {Function} formatCell - A function to format the cell content based on the column name and value.
+ * @param {number} [initCol=0] - The initial column index to sort by.
+ * @param {boolean} [initDesc=false] - Whether to initially sort in descending order
+ */
+function renderTable (
+    tableId, colNames, data, colLabels, formatCell,
+    initCol = 0, initDesc = false
+) {
+
+    let sortCol = initCol, sortAsc = initDesc;
+
+    function render ( sortedData ) {
+
+        const thead = `<tr>${ colLabels.map( ( l, i ) =>
+            `<th data-idx="${i}" class="sortable ${ (
+                sortCol === i ? 'active' : ''
+            ) }">${l}${ (
+                sortCol === i ? ( sortAsc ? ' ▲' : ' ▼' ) : ''
+            ) }</th>`
+        ).join( '' ) }</tr>`;
+
+        const rows = sortedData.map( row =>
+            `<tr>${ colNames.map(
+                ( k, _ ) => formatCell( k, row[ k ] )
+            ).join( '' ) }</tr>`
+        ).join( '' );
+
+        document.getElementById( tableId ).innerHTML = `<thead>${thead}</thead><tbody>${rows}</tbody>`;
+
+        // Event-Listener for sorting columns
+        document.querySelectorAll( `#${tableId} th.sortable` ).forEach( th => {
+
+            th.onclick = () => {
+
+                const idx = Number ( th.dataset.idx );
+
+                if ( sortCol === idx ) { sortAsc = ! sortAsc; }
+                else { sortCol = idx; sortAsc = true; }
+
+                const key = colNames[ sortCol ];
+
+                const sorted = [ ...data ].sort( ( a, b ) => {
+
+                    let va = a[ key ], vb = b[ key ];
+
+                    if ( ! isNaN( va ) && ! isNaN( vb ) ) {
+                        va = Number ( va );
+                        vb = Number ( vb );
+                    }
+
+                    return ( va > vb ? 1 : va < vb ? -1 : 0 ) * ( sortAsc ? 1 : -1 );
+
+                } );
+
+                render( sorted );
+
+            };
+
+        } );
+
+    }
+
+    render( data );
+
+    // Initial sort
+    document.querySelectorAll( `#${tableId} th.sortable` )[ sortCol ].click();
+
+}
