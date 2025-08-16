@@ -34,133 +34,64 @@ function renderCharts( dailyData ) {
 
     if ( ! dailyData.length ) return;
 
-    dailyData = dailyData.slice( -60 );
+    const data = dailyData.slice( -60 );
+    const labels = data.map( r => formatDate( r.date ) );
 
-    const labels = dailyData.map( r => formatDate( r.date ) );
-    const totalPoints = dailyData.map( r => Number ( r.total ) );
-    const dailyPoints = dailyData.map( r => Number ( r.daily ) );
-    const rank = dailyData.map( r => Number ( r.rank ) );
-    const countryRank = dailyData.map( r => Number ( r.country_rank ) );
-
-    Chart.defaults.font.family = '"Archivo", sans-serif';
-
-    const chartOpts = {
-        responsive: true,
-        plugins: {
-            legend: { display: false },
-            tooltip: {
-                enabled: true,
-                mode: 'index',
-                intersect: false,
-                padding: {
-                    top: 10, left: 10,
-                    right: 24, bottom: 8
-                },
-                displayColors: false,
-                titleMarginBottom: 0,
-                titleFont: { size: 13 },
-                titleColor: '#222',
-                bodyFont: { size: 20 },
-                bodyColor: '#3b82f6',
-                borderColor: '#3b82f6',
-                backgroundColor: '#fff',
-                borderWidth: 1,
-                callbacks: {
-                    title: items => items[ 0 ].label,
-                    label: ctx => {
-                        return formatNumber( ctx.parsed.y );
-                    }
-                }
-            }
-        },
-        elements: { point: { radius: 0 }, line: { borderWidth: 3 } },
-        scales: {
-            x: {
-                grid: { color: '#f3f4f6', lineWidth: 1 },
-                ticks: {
-                    color: '#888',
-                    maxRotation: 0,
-                    minRotation: 0
-                }
-            },
-            y: {
-                grid: { color: '#f3f4f6', lineWidth: 1 },
-                ticks: {
-                    color: '#888',
-                    maxTicksLimit: 6,
-                    callback: val => formatCompact( val )
-                }
-            }
-        }
-    };
-
-    new Chart( document.getElementById( 'totalPointsChart' ).getContext( '2d' ), {
-        type: 'line',
-        data: { labels, datasets: [ {
+    renderChart(
+        document.getElementById( 'totalPointsChart' ),
+        {
+            labels,
+            data: data.map( r => Number ( r.total ) ),
             label: 'Total Points',
-            data: totalPoints,
-            borderColor: '#3b82f6',
-            backgroundColor: '#3b82f611',
-            fill: true
-        } ] },
-        options: chartOpts
-    } );
+            color: '#3b82f6',
+            type: 'line',
+            reverseY: false,
+            isBar: false,
+            stepped: false
+        }
+    );
 
-    new Chart( document.getElementById( 'rankChart' ).getContext( '2d' ), {
-        type: 'line',
-        data: { labels, datasets: [ {
+    renderChart(
+        document.getElementById( 'worldRankChart' ),
+        {
+            labels,
+            data: data.map( r => Number ( r.rank ) ),
             label: 'World Rank',
-            data: rank,
-            borderColor: '#22c55e',
-            backgroundColor: '#22c55e11',
-            fill: true,
+            color: '#22c55e',
+            type: 'line',
+            reverseY: true,
+            isBar: false,
             stepped: true
-        } ] },
-        options: { ...chartOpts, scales: {
-            ...chartOpts.scales, y: {
-                ...chartOpts.scales.y,
-                reverse: true
-            }
-        } }
-    } );
+        }
+    );
 
-    new Chart( document.getElementById( 'dailyPointsChart' ).getContext( '2d' ), {
-        type: 'bar',
-        data: { labels, datasets: [ {
+    renderChart(
+        document.getElementById( 'dailyPointsChart' ),
+        {
+            labels,
+            data: data.map( r => Number ( r.daily ) ),
             label: 'Daily Points',
-            data: dailyPoints,
-            backgroundColor: '#fbbf24'
-        } ] },
-        options: { ...chartOpts, elements: {
-            bar: { borderRadius: 3 }
-        }, scales: {
-            ...chartOpts.scales, x: {
-                ...chartOpts.scales.x,
-                offset: true
-            }, y: {
-                ...chartOpts.scales.y,
-                min: 0
-            }
-        } }
-    } );
+            color: '#fbbf24',
+            type: 'bar',
+            reverseY: false,
+            isBar: true,
+            stepped: false
+        }
+    );
 
-    new Chart( document.getElementById( 'countryRankChart' ).getContext( '2d' ), {
-        type: 'line',
-        data: { labels, datasets: [ {
+    renderChart(
+        document.getElementById( 'countryRankChart' ),
+        {
+            labels,
+            data: data.map( r => Number ( r.country_rank ) ),
             label: 'Country Rank',
-            data: countryRank,
-            borderColor: '#8b5cf6',
-            backgroundColor: '#8b5cf611',
-            fill: true,
+            color: '#8b5cf6',
+            type: 'line',
+            reverseY: true,
+            isBar: false,
             stepped: true
-        } ] },
-        options: { ...chartOpts, scales: {
-            ...chartOpts.scales, y: {
-                ...chartOpts.scales.y,
-                reverse: true
-            }
-        } }
-    } );
+        }
+    );
 
 }
 

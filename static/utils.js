@@ -212,7 +212,7 @@ function renderChart ( canvas, opts, range, extra ) {
     const { labels, data, label, color, type, reverseY, isBar } = opts;
 
     // Limit range
-    let start = range?.start ?? labels.length - 60,
+    let start = range?.start ?? 0,
         end = range?.end ?? labels.length;
 
     const l = labels.slice( start, end ),
@@ -228,7 +228,7 @@ function renderChart ( canvas, opts, range, extra ) {
                 label: label,
                 data: d,
                 borderColor: color,
-                backgroundColor: color + '11',
+                backgroundColor: color + ( isBar ? 'ff' : '11' ),
                 fill: ! isBar,
                 stepped: !! opts.stepped,
                 ...( isBar ? {
@@ -241,6 +241,7 @@ function renderChart ( canvas, opts, range, extra ) {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: { display: false },
                 tooltip: {
