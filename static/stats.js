@@ -37,61 +37,23 @@ function renderCharts( dailyData ) {
     const data = dailyData.slice( -60 );
     const labels = data.map( r => formatDate( r.date ) );
 
-    renderChart(
-        document.getElementById( 'totalPointsChart' ),
-        {
-            labels,
-            data: data.map( r => Number ( r.total ) ),
-            label: 'Total Points',
-            color: '#3b82f6',
-            type: 'line',
-            reverseY: false,
-            isBar: false,
-            stepped: false
-        }
-    );
+    Object.values( chartConfig ).forEach( chart => {
 
-    renderChart(
-        document.getElementById( 'worldRankChart' ),
-        {
-            labels,
-            data: data.map( r => Number ( r.rank ) ),
-            label: 'World Rank',
-            color: '#22c55e',
-            type: 'line',
-            reverseY: true,
-            isBar: false,
-            stepped: true
-        }
-    );
+        renderChart(
+            document.getElementById( chart.id ),
+            {
+                labels,
+                data: data.map( r => Number ( r[ chart.col ] ) ),
+                label: chart.label,
+                color: chart.color,
+                type: chart.isBar ? 'bar' : 'line',
+                reverseY: chart.reverseY,
+                isBar: chart.isBar,
+                stepped: chart.stepped
+            }
+        );
 
-    renderChart(
-        document.getElementById( 'dailyPointsChart' ),
-        {
-            labels,
-            data: data.map( r => Number ( r.daily ) ),
-            label: 'Daily Points',
-            color: '#fbbf24',
-            type: 'bar',
-            reverseY: false,
-            isBar: true,
-            stepped: false
-        }
-    );
-
-    renderChart(
-        document.getElementById( 'countryRankChart' ),
-        {
-            labels,
-            data: data.map( r => Number ( r.country_rank ) ),
-            label: 'Country Rank',
-            color: '#8b5cf6',
-            type: 'line',
-            reverseY: true,
-            isBar: false,
-            stepped: true
-        }
-    );
+    } );
 
 }
 
