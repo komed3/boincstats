@@ -218,6 +218,8 @@ function renderChart ( canvas, opts, range, extra ) {
     const l = labels.slice( start, end ),
           d = data.slice( start, end );
 
+    Chart.defaults.font.family = '"Archivo", sans-serif';
+
     return new Chart( canvas.getContext( '2d' ), {
         type: type || ( isBar ? 'bar' : 'line' ),
         data: {
@@ -245,9 +247,19 @@ function renderChart ( canvas, opts, range, extra ) {
                     enabled: true,
                     mode: 'index',
                     intersect: false,
+                    padding: {
+                        top: 10, left: 10,
+                        right: 24, bottom: 8
+                    },
                     displayColors: false,
-                    bodyFont: { size: 20, family: '"Archivo", sans-serif' },
-                    titleFont: { size: 13, family: '"Archivo", sans-serif' },
+                    titleMarginBottom: 0,
+                    titleFont: { size: 13, weight: 400 },
+                    titleColor: '#222',
+                    bodyFont: { size: 20, weight: 600 },
+                    bodyColor: color,
+                    borderColor: color,
+                    backgroundColor: '#fff',
+                    borderWidth: 1,
                     callbacks: {
                         title: items => items[ 0 ].label,
                         label: ctx => formatNumber( ctx.parsed.y )
