@@ -9,7 +9,8 @@ const chartConfig = {
         color: '#3b82f6',
         reverseY: false,
         isBar: false,
-        stepped: false
+        stepped: false,
+        decimals: 0
     },
     rank: {
         id: 'worldRankChart',
@@ -18,7 +19,8 @@ const chartConfig = {
         color: '#22c55e',
         reverseY: true,
         isBar: false,
-        stepped: true
+        stepped: true,
+        decimals: 0
     },
     daily: {
         id: 'dailyPointsChart',
@@ -27,7 +29,8 @@ const chartConfig = {
         color: '#fbbf24',
         reverseY: false,
         isBar: true,
-        stepped: false
+        stepped: false,
+        decimals: 0
     },
     country: {
         id: 'countryRankChart',
@@ -36,7 +39,8 @@ const chartConfig = {
         color: '#8b5cf6',
         reverseY: true,
         isBar: false,
-        stepped: true
+        stepped: true,
+        decimals: 0
     },
     active: {
         id: 'activeRankChart',
@@ -45,7 +49,8 @@ const chartConfig = {
         color: '#ec4899',
         reverseY: true,
         isBar: false,
-        stepped: true
+        stepped: true,
+        decimals: 0
     },
     average: {
         id: 'averagePointsChart',
@@ -54,7 +59,8 @@ const chartConfig = {
         color: '#10b981',
         reverseY: false,
         isBar: false,
-        stepped: false
+        stepped: false,
+        decimals: 2
     }
 };
 

@@ -35,7 +35,8 @@ async function main () {
                 type: cfg.isBar ? 'bar' : 'line',
                 reverseY: cfg.reverseY,
                 isBar: cfg.isBar,
-                stepped: cfg.stepped
+                stepped: cfg.stepped,
+                decimals: cfg.decimals
             }
         );
 

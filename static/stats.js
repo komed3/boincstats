@@ -41,7 +41,8 @@ function renderCharts( dailyData ) {
                 type: chart.isBar ? 'bar' : 'line',
                 reverseY: chart.reverseY,
                 isBar: chart.isBar,
-                stepped: chart.stepped
+                stepped: chart.stepped,
+                decimals: chart.decimals
             }
         );
 

@@ -263,7 +263,7 @@ function renderChart ( canvas, opts, range, extra ) {
                     borderWidth: 1,
                     callbacks: {
                         title: items => items[ 0 ].label,
-                        label: ctx => formatNumber( ctx.parsed.y )
+                        label: ctx => formatNumber( ctx.parsed.y, opts.decimals || 0 )
                     }
                 }
             },
