@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Average Points – komed3’s BOINC Stats</title>
+        <link rel="stylesheet" href="./static/styles.min.css" />
+        <link rel="icon" href="./favicon.png" type="image/png" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="./static/utils.min.js"></script>
+        <script src="./static/cfg.min.js"></script>
+        <script src="./static/chart.min.js" defer></script>
+    </head>
+    <body>
+        <header role="banner">
+            <h1>
+                <img src="./favicon.png" loading="lazy" alt="Logo" />
+                <span>komed3’s BOINC Stats</span>
+            </h1>
+        </header>
+        <main>
+            <section>
+                <a href="index.htm">&larr; Go back</a>
+                <h2>Average Points (60 days)</h2>
+            </section>
+            <section>
+                <div id="range-buttons">
+                    <button data-range="14">2W</button>
+                    <button data-range="30">1M</button>
+                    <button data-range="90">3M</button>
+                    <button data-range="180">6M</button>
+                    <button data-range="365">1Y</button>
+                    <button data-range="max">MAX</button>
+                </div>
+                <div class="chart-canvas big-canvas">
+                    <canvas id="averagePointsChart"></canvas>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <small>&copy; 2025 <a href="https://komed3.de">komed3</a> &ndash; BOINC Stats</small>
+        </footer>
+    </body>
+</html>

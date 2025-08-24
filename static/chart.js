@@ -5,9 +5,8 @@
  */
 async function main () {
 
-    const page = location.pathname.match( /(total|rank|daily|country)/ )?.[ 1 ] || 'total';
+    const page = location.pathname.match( /(total|rank|active|country|average|daily)/ )?.[ 1 ] || 'total';
     const cfg = chartConfig[ page ];
-    const dailyCols = [ 'date', 'total', 'daily', 'rank', 'rank_cng', 'team_rank', 'team_cng', 'country_rank', 'country_cng' ];
     const data = await fetchTable( 'db/daily', dailyCols, 'total' );
     const labels = data.map( r => formatDate( r.date ) );
     const values = data.map( r => Number ( r[ cfg.col ] ) );
