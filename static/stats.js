@@ -6,23 +6,15 @@ function renderHighlights ( dailyData ) {
 
     if ( ! dailyData.length ) return;
 
-    const daycnt = dailyData.length;
-    const latest = dailyData[ daycnt - 1 ];
+    for ( const [ key, val ] of Object.entries( dailyData.at( -1 ) ) ) {
 
-    document.querySelector( `#highlights [data-item="total_points"]` ).innerHTML =
-        formatNumber( latest.total );
+        const el = document.querySelector( `#highlights [data-item="${key}"]` );
 
-    document.querySelector( `#highlights [data-item="average_points"]` ).innerHTML =
-        formatNumber( latest.total / daycnt, 1 );
+        if ( el ) el.innerHTML = window[
+            el.dataset.fnc ?? 'formatNumber'
+        ]( val, el.dataset.decimals ?? 0 );
 
-    document.querySelector( `#highlights [data-item="world_rank"]` ).innerHTML =
-        formatNumber( latest.rank );
-
-    document.querySelector( `#highlights [data-item="country_rank"]` ).innerHTML =
-        formatNumber( latest.country_rank );
-
-    document.querySelector( `#highlights [data-item="rank_change"]` ).innerHTML =
-        formatDiff( latest.rank_cng );
+    }
 
 }
 
@@ -64,8 +56,8 @@ function renderCharts( dailyData ) {
  */
 async function main () {
 
-    const dailyCols = [ 'date', 'total', 'daily', 'rank', 'rank_cng', 'team_rank', 'team_cng', 'country_rank', 'country_cng' ];
-    const dailyLabels = [ 'Date', 'Total', 'Daily', 'Rank', 'Δ Rank', 'Team Rank', 'Δ Team', 'Country Rank', 'Δ Country' ];
+    const dailyCols = [ 'date', 'total', 'daily', 'rank', 'rank_cng', 'team_rank', 'team_cng', 'country_rank', 'country_cng', 'rac', 'rac_60', 'active_rank' ];
+    const dailyLabels = [ 'Date', 'Total', 'Daily', 'Rank', 'Δ Rank', 'Team Rank', 'Δ Team', 'Country Rank', 'Δ Country', 'RAC', 'RAC (60D)', 'Active Rank' ];
     const projectsCols = [ 'project', 'total', 'share', 'today', 'daily', 'weekly', 'monthly', 'rank', 'rank_cng_day', 'rank_cng_week', 'rank_cng_month', 'team_rank', 'country_rank' ];
     const projectsLabels = [ 'Project', 'Total', 'Share', 'Today', 'Daily', 'Weekly', 'Monthly', 'Rank', 'Δ Day', 'Δ Week', 'Δ Month', 'Team Rank', 'Country Rank' ];
     const hostsCols = [ 'rank', 'cpu', 'cores', 'os', 'total', 'daily', 'weekly', 'monthly', 'avg' ];
