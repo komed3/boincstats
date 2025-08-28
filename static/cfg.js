@@ -10,7 +10,8 @@ const chartConfig = {
         reverseY: false,
         isBar: false,
         stepped: false,
-        decimals: 0
+        decimals: 0,
+        grouping: 'last'
     },
     rank: {
         id: 'worldRankChart',
@@ -20,7 +21,8 @@ const chartConfig = {
         reverseY: true,
         isBar: false,
         stepped: true,
-        decimals: 0
+        decimals: 0,
+        grouping: 'last'
     },
     daily: {
         id: 'dailyPointsChart',
@@ -30,7 +32,8 @@ const chartConfig = {
         reverseY: false,
         isBar: true,
         stepped: false,
-        decimals: 0
+        decimals: 0,
+        grouping: 'sum'
     },
     country: {
         id: 'countryRankChart',
@@ -40,7 +43,8 @@ const chartConfig = {
         reverseY: true,
         isBar: false,
         stepped: true,
-        decimals: 0
+        decimals: 0,
+        grouping: 'last'
     },
     active: {
         id: 'activeRankChart',
@@ -50,7 +54,8 @@ const chartConfig = {
         reverseY: true,
         isBar: false,
         stepped: true,
-        decimals: 0
+        decimals: 0,
+        grouping: 'last'
     },
     average: {
         id: 'averagePointsChart',
@@ -60,7 +65,8 @@ const chartConfig = {
         reverseY: false,
         isBar: false,
         stepped: false,
-        decimals: 2
+        decimals: 2,
+        grouping: 'last'
     }
 };
 

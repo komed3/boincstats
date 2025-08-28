@@ -209,14 +209,50 @@ function renderTable (
  */
 function renderChart ( canvas, opts, range, extra ) {
 
-    const { labels, data, label, color, type, reverseY, isBar } = opts;
+    const { labels, data, label, color, type, reverseY, isBar, grouping } = opts;
 
     // Limit range
     let start = range?.start ?? 0,
         end = range?.end ?? labels.length;
 
-    const l = labels.slice( start, end ),
-          d = data.slice( start, end );
+    let l = labels.slice( start, end ),
+        d = data.slice( start, end );
+
+    // Dynamic grouping depending on chart size
+    const maxPoints = Math.max( 10, Math.floor(
+        ( canvas.offsetWidth || 600 ) /
+        ( isBar ? 12 : 3 )
+    ) );
+
+    if ( l.length > maxPoints ) {
+
+        const step = l.length / maxPoints;
+        let groupedL = [], groupedD = [];
+
+        for ( let i = 0; i < maxPoints; ++i ) {
+
+            const from = Math.floor( i * step ), to = Math.floor( ( i + 1 ) * step );
+            const sliceL = l.slice( from, to ), sliceD = d.slice( from, to );
+
+            if ( ! sliceL.length ) continue;
+
+            groupedL.push( sliceL[
+                grouping === 'first' ? 0 :
+                grouping === 'last' ? sliceL.length - 1 :
+                Math.floor( sliceL.length / 2 )
+            ] );
+
+            if ( grouping === 'sum' ) groupedD.push( sliceD.reduce( ( a, b ) => a + b, 0 ) );
+            else if ( grouping === 'avg' ) groupedD.push( sliceD.reduce( ( a, b ) => a + b, 0 ) / sliceD.length );
+            else if ( grouping === 'first' ) groupedD.push( sliceD[ 0 ] );
+            else /* 'last' and fallback */ groupedD.push( sliceD[ sliceD.length - 1 ] );
+
+        }
+
+        l = groupedL;
+        d = groupedD;
+
+    }
 
     Chart.defaults.font.family = '"Archivo", sans-serif';
 

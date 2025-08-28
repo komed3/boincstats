@@ -36,7 +36,8 @@ async function main () {
                 reverseY: cfg.reverseY,
                 isBar: cfg.isBar,
                 stepped: cfg.stepped,
-                decimals: cfg.decimals
+                decimals: cfg.decimals,
+                grouping: cfg.grouping
             }
         );
 

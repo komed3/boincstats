@@ -42,7 +42,8 @@ function renderCharts( dailyData ) {
                 reverseY: chart.reverseY,
                 isBar: chart.isBar,
                 stepped: chart.stepped,
-                decimals: chart.decimals
+                decimals: chart.decimals,
+                grouping: chart.grouping
             }
         );
 
