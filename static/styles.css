@@ -60,7 +60,7 @@ header h1 {
     flex-flow: row wrap;
     justify-content: center;
     align-items: center;
-    gap: 0.2em 1em;
+    gap: 0.2rem 1rem;
 }
 
 main {
@@ -101,14 +101,14 @@ h2 {
 
 .highlight-tile h3 {
     margin: 0;
-    font-size: 1.1em;
+    font-size: 1.1rem;
     color: var( --accent );
 }
 
 .highlight-tile p {
     margin: 0;
     white-space: nowrap;
-    font-size: 1.6em;
+    font-size: 1.6rem;
     font-weight: bold;
 }
 
@@ -123,7 +123,7 @@ h2 {
 
 .chart-tile h3 {
     margin: 0;
-    font-size: 1.1em;
+    font-size: 1.1rem;
     color: var( --accent );
 }
 
@@ -179,6 +179,55 @@ h2 {
     background: var( --accent );
 }
 
+/** Projection */
+
+.projection-form {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 1.6rem;
+    padding: 1.2rem 2rem;
+    background: var( --highlight );
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #0001;
+}
+
+.projection-form span {
+    font-size: 2rem;
+    opacity: 0.4;
+}
+
+.projection-form label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var( --accent );
+}
+
+.projection-form input {
+    flex: 1;
+    min-width: 120px;
+    padding: 0.6rem 0.8rem;
+    text-align: right;
+    font-family: inherit;
+    font-size: 1.6rem;
+    color: var( --text );
+    background: var( --bg );
+    border: 0;
+    border-radius: 6px;
+}
+
+.projection-form button {
+    padding: 0.8rem 1rem;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #fff;
+    background: var( --accent );
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
 /** Tables */
 
 .table-responsive {
@@ -196,7 +245,7 @@ table {
 }
 
 th, td {
-    padding: 0.6em 1em;
+    padding: 0.6rem 1rem;
     text-align: right;
     white-space: nowrap;
     border-bottom: 1px solid #eee;
