@@ -148,7 +148,10 @@ def scraping () -> None :
             if stream := get_stream( url ):
                 if data := parse_table( stream, opt ):
                     rows = save_to_db( page, opt, data )
-        print( f'   ... done [{rows} entries]' )
+        if rows == 1:
+            print( f'   ... done [1 entry]' )
+        else:
+            print( f'   ... done [{rows} entries]' )
         time.sleep( random.randint( 5, 15 ) )
 
 # The main program loop
