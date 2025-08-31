@@ -214,6 +214,7 @@ h2 {
     background: var( --bg );
     border: 0;
     border-radius: 6px;
+    cursor: text;
 }
 
 /** Tables */
@@ -297,6 +298,7 @@ tr:hover {
     }
 
     .projection-approx {
+        line-height: 3rem;
         font-size: 2.4rem;
     }
 
