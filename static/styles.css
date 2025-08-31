@@ -182,50 +182,38 @@ h2 {
 /** Projection */
 
 .projection-form {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    gap: 1.6rem;
-    padding: 1.2rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr max-content 1fr;
+    align-items: end;
+    gap: 2rem;
+    padding: 1rem;
     background: var( --highlight );
     border-radius: 10px;
     box-shadow: 0 2px 8px #0001;
 }
 
-.projection-form span {
-    font-size: 2rem;
-    opacity: 0.4;
+.projection-approx {
+    line-height: 3.4rem;
+    font-size: 3rem;
+    color: #888;
 }
 
-.projection-form label {
-    font-size: 1.1rem;
+.projection-group label {
+    display: block;
+    margin-bottom: 0.6rem;
     font-weight: bold;
     color: var( --accent );
 }
 
-.projection-form input {
-    flex: 1;
-    min-width: 120px;
-    padding: 0.6rem 0.8rem;
-    text-align: right;
+.projection-group input {
+    display: block;
+    width: 100%;
+    padding: 0.8rem 1rem;
     font-family: inherit;
-    font-size: 1.6rem;
-    color: var( --text );
+    font-size: 1.2rem;
     background: var( --bg );
     border: 0;
     border-radius: 6px;
-}
-
-.projection-form button {
-    padding: 0.8rem 1rem;
-    font-family: inherit;
-    font-weight: bold;
-    font-size: 1rem;
-    color: #fff;
-    background: var( --accent );
-    border: 0;
-    border-radius: 6px;
-    cursor: pointer;
 }
 
 /** Tables */
@@ -287,29 +275,6 @@ tr:hover {
         justify-content: center;
     }
 
-    .projection-form span,
-    .projection-form button {
-        display: none;
-    }
-
-}
-
-@media ( max-width: 800px ) {
-
-    .projection-form {
-        flex-direction: column;
-        gap: 0.6rem;
-    }
-
-    .projection-form input {
-        width: 100%;
-        text-align: center;
-    }
-
-    .projection-form input[type="date"] {
-        margin-bottom: 1rem;
-    }
-
 }
 
 @media ( max-width: 600px ) {
@@ -325,6 +290,19 @@ tr:hover {
 
     #charts canvas {
         height: 260px !important;
+    }
+
+    .projection-form {
+        gap: 1rem;
+    }
+
+    .projection-approx {
+        font-size: 2.4rem;
+    }
+
+    .projection-group input {
+        padding: 0.8rem 0.6rem;
+        font-size: 1.1rem;
     }
 
 }

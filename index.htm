@@ -81,14 +81,17 @@
             </section>
             <section id="projection">
                 <h2>Projection</h2>
-                <form class="projection-form" autocomplete="off">
-                    <label for="projection-date">Date</label>
-                    <input type="date" id="projection-date" min="" max="" />
-                    <span>/</span>
-                    <label for="projection-points">Score</label>
-                    <input type="number" id="projection-points" min="" max="" step="1" />
-                    <button type="submit">Calculate</button>
-                </form>
+                <div class="projection-form" autocomplete="off">
+                    <div class="projection-group">
+                        <label for="projection-points">Score</label>
+                        <input type="number" id="projection-points" step="1" />
+                    </div>
+                    <span class="projection-approx">≈</span>
+                    <div class="projection-group">
+                        <label for="projection-date">Date</label>
+                        <input type="date" id="projection-date" />
+                    </div>
+                </div>
             </section>
             <section>
                 <h2>Daily Stats</h2>
