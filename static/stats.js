@@ -51,18 +51,83 @@ function renderCharts ( dailyData ) {
 }
 
 /**
- * Sets the minimum values for projection input fields based on the latest daily data.
+ * Sets up projection controls and event listeners.
  * @param {Array} dailyData - Array of daily data objects.
  */
-function projectionLimits ( dailyData ) {
+function projectionSetup ( dailyData ) {
 
     if ( ! dailyData.length ) return;
 
-    const elPoints = document.getElementById( 'projection-points' );
-    const elDate = document.getElementById( 'projection-date' );
+    const latest = dailyData.at( -1 );
 
-    if ( elPoints ) elPoints.min = dailyData.at( -1 ).total;
-    if ( elDate ) elDate.min = new Date().toISOString().split( 'T' )[ 0 ];
+    const elP = document.getElementById( 'projection-points' );
+    const elD = document.getElementById( 'projection-date' );
+    const elR = document.getElementById( 'projection-result' );
+
+    if ( elP && elD && elR ) {
+
+        elP.value = elP.min = latest.total;
+
+        elP.addEventListener( 'input', ( e ) => projectionLiveUpdate( e, latest, elP, elD, elR ) );
+        elP.addEventListener( 'change', ( e ) => projectionLiveUpdate( e, latest, elP, elD, elR ) );
+
+        elD.value = elD.min = new Date().toISOString().split( 'T' )[ 0 ];
+
+        elD.addEventListener( 'input', ( e ) => projectionLiveUpdate( e, latest, elP, elD, elR ) );
+        elD.addEventListener( 'change', ( e ) => projectionLiveUpdate( e, latest, elP, elD, elR ) );
+
+    }
+
+}
+
+/**
+ * Handles live updates for projection inputs.
+ * @param {Event} e - The input event.
+ * @param {Object} data - The latest daily data object.
+ * @param {HTMLElement} elP - The points input element.
+ * @param {HTMLElement} elD - The date input element.
+ * @param {HTMLElement} elR - The result display element.
+ */
+function projectionLiveUpdate ( e, data, elP, elD, elR ) {
+
+    const today = new Date();
+    let days = 0, update = false;
+
+    if ( e.target.id === 'projection-points' ) {
+
+        days = Math.ceil( ( parseInt( elP.value ) - data.total ) / data.rac_60 );
+
+        if ( days >= 0 ) {
+
+            today.setDate( today.getDate() + days );
+            elD.value = today.toISOString().split( 'T' )[ 0 ];
+
+            update = true;
+
+        }
+
+    } else if ( e.target.id === 'projection-date' ) {
+
+        days = Math.ceil( ( new Date( elD.value ) - today ) / 84600000 );
+
+        if ( days >= 0 ) {
+
+            elP.value = parseInt( data.total ) + parseInt( days * data.rac_60 );
+
+            update = true;
+
+        }
+
+    }
+
+    if ( days > 1e5 ) elR.innerHTML = `Let’s be realistic! Try for a lower score or a closer date.`;
+    else if ( update ) elR.innerHTML = `A score of <b>${ (
+        formatNumber( elP.value )
+    ) }</b> will be reached in <b>${ (
+        formatNumber( days )
+    ) }</b> days around <b>${ (
+        formatDate( elD.value )
+    ) }</b>`;
 
 }
 
@@ -103,8 +168,8 @@ async function main () {
         `<td>${ formatNumber( v ) }</td>`
     );
 
-    // Set projection limits
-    projectionLimits( daily );
+    // Set up projection
+    projectionSetup( daily );
 
 }
 
