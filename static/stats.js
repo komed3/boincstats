@@ -31,21 +31,20 @@ function renderCharts ( dailyData ) {
 
     Object.values( chartConfig ).forEach( chart => {
 
-        renderChart(
-            document.getElementById( chart.id ),
-            {
-                labels,
-                data: data.map( r => Number ( r[ chart.col ] ) ),
-                label: chart.label,
-                color: chart.color,
-                type: chart.isBar ? 'bar' : 'line',
-                reverseY: chart.reverseY,
-                isBar: chart.isBar,
-                stepped: chart.stepped,
-                decimals: chart.decimals,
-                grouping: chart.grouping
-            }
-        );
+        const el = document.getElementById( chart.id );
+
+        if ( el ) renderChart( el, {
+            labels,
+            data: data.map( r => Number ( r[ chart.col ] ) ),
+            label: chart.label,
+            color: chart.color,
+            type: chart.isBar ? 'bar' : 'line',
+            reverseY: chart.reverseY,
+            isBar: chart.isBar,
+            stepped: chart.stepped,
+            decimals: chart.decimals,
+            grouping: chart.grouping
+        } );
 
     } );
 
@@ -85,9 +84,6 @@ async function main () {
     renderHighlights( daily );
     renderCharts( daily );
 
-    // Set projection limits
-    projectionLimits( daily );
-
     // Render sortable tables
     renderTable( 'dailyTable', dailyCols, daily, dailyLabels, ( k, v ) =>
         k === 'date' ? `<td>${ formatDate( v ) }</td>` :
@@ -106,6 +102,9 @@ async function main () {
         k === 'cpu' || k === 'os' ? `<td>${v}</td>` :
         `<td>${ formatNumber( v ) }</td>`
     );
+
+    // Set projection limits
+    projectionLimits( daily );
 
 }
 
