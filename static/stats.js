@@ -22,7 +22,7 @@ function renderHighlights ( dailyData ) {
  * Renders charts based on daily data.
  * @param {Array} dailyData - Array of daily data objects, each containing date, total points, daily points, rank, and country rank.
  */
-function renderCharts( dailyData ) {
+function renderCharts ( dailyData ) {
 
     if ( ! dailyData.length ) return;
 
@@ -52,6 +52,22 @@ function renderCharts( dailyData ) {
 }
 
 /**
+ * Sets the minimum values for projection input fields based on the latest daily data.
+ * @param {Array} dailyData - Array of daily data objects.
+ */
+function projectionLimits ( dailyData ) {
+
+    if ( ! dailyData.length ) return;
+
+    const elPoints = document.getElementById( 'projection-points' );
+    const elDate = document.getElementById( 'projection-date' );
+
+    if ( elPoints ) elPoints.min = dailyData.at( -1 ).total;
+    if ( elDate ) elDate.min = new Date().toISOString().split( 'T' )[ 0 ];
+
+}
+
+/**
  * Main Function
  * Initializes the page by fetching data and rendering tables and charts.
  * This function is called when the DOM content is fully loaded.
@@ -68,6 +84,9 @@ async function main () {
     // Render highlight tiles and charts
     renderHighlights( daily );
     renderCharts( daily );
+
+    // Set projection limits
+    projectionLimits( daily );
 
     // Render sortable tables
     renderTable( 'dailyTable', dailyCols, daily, dailyLabels, ( k, v ) =>
